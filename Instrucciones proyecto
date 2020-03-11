@@ -1,0 +1,15 @@
+
+
+1) configurar archivo .env
+2) composer install
+3) composer require laravel-frontend-presets/argon
+4) composer dump-autoload
+5) php artisan migrate --seed
+
+De ahi en adelante usen en laravel como ya saben
+
+
+Credenciales: 
+
+user: admin@argon.com
+password: secret
