@@ -13,15 +13,12 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\User::class, function (Faker $faker) {
-    static $password;
+$factory->define(App\Admins::class, function (Faker $faker) {
+   
 
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
-        'admin_id'=>1,
-        'inscrito_id'=>$faker->inscrito_id,
-        'remember_token' => str_random(10),
+        'name' => $faker->nombre,
+        'apellido' => $faker->apellido,
+     
     ];
 });

@@ -17,6 +17,8 @@ class UsersTableSeeder extends Seeder
             'email' => 'admin@argon.com',
             //'email_verified_at' => now(),
             'password' => Hash::make('secret'),
+            'admin_id'=>1,
+            'inscrito_id'=>null,
             'created_at' => now(),
             'updated_at' => now()
         ]);
