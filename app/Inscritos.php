@@ -13,7 +13,7 @@ class Inscritos extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre','apellido','inscritos_id', 'direccion','cicpc_id','telefono'
+        'nombre','apellido', 'direccion','cicpc_id','telefono'
      ];
  
      /**

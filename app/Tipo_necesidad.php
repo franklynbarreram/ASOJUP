@@ -4,16 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sobrevivientes extends Model
+class Tipo_necesidad extends Model
 {
+    public $table = "necesidades";
     //
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
     protected $fillable = [
-        'nombre','apellido','cedula','inscritos_id', 'direccion','cicpc_id','telefono'
+        'nombre',
      ];
  
      /**

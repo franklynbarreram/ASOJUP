@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Admins ;
-use App\Delegado;
+use App\Necesidades_inscritos ;
+
 use Illuminate\Http\Request;
+
 
 class AdminController extends Controller
 {
     //
     public function consulta(){
-            $hola=Admins::all();
+            $hola=Necesidades_inscritos::all();
             echo $hola;
     }
 }

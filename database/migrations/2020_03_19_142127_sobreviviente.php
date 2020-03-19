@@ -16,8 +16,8 @@ class Sobreviviente extends Migration
         //
         Schema::create('sobrevivientes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre')->nullable();
-            $table->string('apellido')->nullable();
+            $table->string('nombre');
+            $table->string('apellido');
             $table->string('cicpc_id');
             $table->string('telefono');
             $table->string('cedula');
