@@ -23,11 +23,14 @@
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
-            @include('layouts.navbars.sidebar')
+            @include('layouts.templates.sidebar')
         @endauth
         
         <div class="main-content">
-            @include('layouts.navbars.navbar')
+            @auth
+                @include('layouts.templates.navbar')
+            @endauth
+            
             @yield('content')
         </div>
 
