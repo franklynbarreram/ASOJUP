@@ -13,20 +13,23 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->UnsignedInteger('admin_id')->nullable();
-            $table->UnsignedInteger('inscrito_id')->nullable(); 
-            $table->UnsignedInteger('delegado_id')->nullable(); 
-            $table->rememberToken();
-            $table->timestamps();
-            $table->foreign('admin_id')->references('id')->on('admins'); 
-            $table->foreign('inscrito_id')->references('id')->on('inscritos'); 
-            $table->foreign('delegado_id')->references('id')->on('delegados'); 
-        });
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->string('password');
+    
+                $table->unsignedInteger('zone_id');
+                $table->foreign('zone_id')->references('id')->on('zones')->onDelete('cascade');
+    
+                $table->unsignedInteger('role_id');
+                $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+                
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

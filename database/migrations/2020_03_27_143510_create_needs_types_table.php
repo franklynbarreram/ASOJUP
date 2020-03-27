@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Admin extends Migration
+class CreateNeedsTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class Admin extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('admins', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('nombre')->nullable();
-            $table->string('apellido')->nullable();
-        
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('needs_types')) {
+            Schema::create('needs_types', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
@@ -30,6 +29,6 @@ class Admin extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('needs_types');
     }
 }

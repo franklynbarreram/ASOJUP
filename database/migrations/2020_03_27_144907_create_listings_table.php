@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Inscritos extends Migration
+class CreateListingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class Inscritos extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('inscritos', function (Blueprint $table) {
+        Schema::create('listings', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('cicpc_id');
-            $table->string('telefono');
-            $table->text('direccion');
+
+            $table->string('description');
+            $table->datetime('date');
+            
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class Inscritos extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('listings');
     }
 }

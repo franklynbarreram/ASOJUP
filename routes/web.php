@@ -1,6 +1,4 @@
 <?php
-use App\Admin;
-use App\Inscritos;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +11,9 @@ use App\Inscritos;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+	return redirect()->route('home');
 });
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
