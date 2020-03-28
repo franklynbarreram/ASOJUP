@@ -8,9 +8,9 @@
             <div class="card-body">
 
                 @include('layouts.templates.card-search-header', [
-                    'title' =>  'Listado de Medicamentos',
-                    'search_route'  =>  'medicines.index',
-                    'create_route'  =>  'medicines.create'
+                    'title' =>  'Listado de Formas Farmacéuticas',
+                    'search_route'  =>  'forms.index',
+                    'create_route'  =>  'forms.create'
                 ])
 
                 @if (\Session::has('notification'))
@@ -28,36 +28,33 @@
                         <table class="table align-items-center">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col" class="sort" data-sort="name">Nombre</th>
-                                    <th scope="col" class="sort" data-sort="budget">Cantidad <small>(caja)</small></th>
-                                    <th scope="col" class="sort" data-sort="completion">Presentación</th>
-                                    <th scope="col" class="sort" data-sort="status">Concentracion</th>
-                                    <th scope="col">Opciones</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Abreviación</th>
+                                    <th class="text-center" scope="col">Opciones</th>
                                 </tr>
                             </thead>
 
                             <tbody class="list">
-                                @foreach ($medicines as $m)
-                                    <tr>
-                                        <td> {{$m->name}} </td>
+                                @foreach ($forms as $f)
+                                <tr>
+                                    <td> # {{$f->id}} </td>
+                                    
+                                    <td> {{$f->name}} </td>
 
-                                        <td> {{$m->box_quantity}} </td>
+                                    <td> {{$f->short_name}} </td>
 
-                                        <td> {{$m->presentation}} </td>
+                                    <td class="options-td">
+                                        <a href="{{route('forms.edit', $f->id)}}" name="Editar">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
 
-                                        <td> {{$m->fullUnits}} </td>
-
-                                        <td class="options-td">
-                                            <a href="{{route('medicines.edit', $m->id)}}" name="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-
-                                            <a href="" name="Eliminar">
-                                                <i class="fas fa-trash text-red"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                        <a href="" name="Eliminar">
+                                            <i class="fas fa-trash text-red"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>

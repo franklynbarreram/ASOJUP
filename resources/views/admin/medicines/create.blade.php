@@ -66,7 +66,7 @@
                             Crear
                         </button>
 
-                        <a href="" class="btn btn-danger">
+                        <a href="{{route('medicines.index')}}" class="btn btn-danger">
                             Regresar
                         </a>
                     </div>
@@ -75,3 +75,14 @@
         </div>       
     </div>
 @endsection
+
+@push('js')
+<script type="text/javascript">
+    let sidebar_link = document.getElementById('medicine-link');
+    sidebar_link.classList.remove('collapsed');
+    sidebar_link.setAttribute('aria-expanded', true);
+
+    let sidebar_options = document.getElementById('medicines-options');
+    sidebar_options.classList.add('show');
+</script>
+@endpush

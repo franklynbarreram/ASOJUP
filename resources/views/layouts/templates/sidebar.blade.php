@@ -88,28 +88,28 @@
                             <!-- Nuevo Inscrito -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('medicines.create') }}">
-                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-plus-square"></i>
                                     {{ __('Crear') }}
                                 </a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('medicines.index') }}">
-                                    <i class="fas fa-list"></i>
+                                    <i class="fas fa-list-alt"></i>
                                     {{ __('Ver Todos') }}
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('medicines.index') }}">
-                                    <i class="fas fa-list"></i>
+                                <a class="nav-link" href="{{ route('forms.index') }}">
+                                    <i class="fas fa-first-aid"></i>
                                     {{ __('Formas Farmacéuticas') }}
                                 </a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('medicines.index') }}">
-                                    <i class="fas fa-list"></i>
+                                    <i class="fas fa-balance-scale"></i>
                                     {{ __('Unidades de Concentración') }}
                                 </a>
                             </li>

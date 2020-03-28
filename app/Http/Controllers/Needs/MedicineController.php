@@ -69,11 +69,11 @@ class MedicineController extends Controller
             */
             $medicine = Medicine::create($request->except('_token'));
 
-            return redirect()->route('medicines.index', [
-                'notification'  =>  '¡Se ha creado la medicina satisfactoriamente!',
-                'success'   =>  true
-            ]);
-
+            return redirect()->route('forms.index')->with(
+                'notification', 'Se ha creado la medicina exitosamente.'
+            )->with(
+                'success', true
+            );
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
@@ -136,10 +136,11 @@ class MedicineController extends Controller
 
         $medicine->update($request->except(['_token', '_method']));
 
-        return redirect()->route('medicines.index', [
-            'notification'  =>  '¡Se ha editado la medicina satisfactoriamente!',
-            'success'   =>  true
-        ]);
+        return redirect()->route('forms.index')->with(
+            'notification', 'Se ha editado la medicina exitosamente.'
+        )->with(
+            'success', true
+        );
     }
 
     /**
