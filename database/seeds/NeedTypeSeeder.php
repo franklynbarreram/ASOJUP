@@ -7,7 +7,7 @@ use App\Models\NeedType;
 class NeedTypeSeeder extends Seeder
 {
     protected $data = [
-        'Enfermedad', 'Medicamento', 'Solicitud'
+        'Enfermedad', 'Solicitud'
     ];
 
     /**
