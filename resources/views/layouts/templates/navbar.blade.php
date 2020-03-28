@@ -36,8 +36,7 @@
                         <span>{{ __('Mi Perfil') }}</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
+                    <a href="{{ route('admin.logout') }}" class="dropdown-item">
                         <i class="ni ni-user-run"></i>
                         <span>{{ __('Cerrar Sesión') }}</span>
                     </a>

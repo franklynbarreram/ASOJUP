@@ -1,7 +1,9 @@
 @extends('layouts.app', ['class' => 'bg-default'])
 
 @section('content')
-    @include('layouts.headers.guest')
+    @include('layouts.headers.guest', [
+        'title'  =>  'Adminitrador ASOJUB'
+    ])
 
     <div class="container mt--8 pb-5">
         <div class="row justify-content-center">
