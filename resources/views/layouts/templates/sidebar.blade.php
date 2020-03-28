@@ -55,12 +55,13 @@
                             <!-- Nuevo Inscrito -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('inscribedUsers.create') }}">
+                                    <i class="fas fa-plus"></i>
                                     {{ __('Nuevo') }}
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('user.index') }}">
-                                    {{ __('Listado') }}
+                                    {{ __('Ver Todos') }}
                                 </a>
                             </li>
                         </ul>
@@ -69,16 +70,62 @@
                 </li>
                 <!-- End of Collapse -->
 
+                <!-- Collapse Medicamentos -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-capsules text-blue"></i> {{ __('Medicamentos') }}
+                    <!-- Opciones para inscritos -->
+                    <a class="nav-link collapsed" href="#medicines-options" id="medicine-link"
+                        data-toggle="collapse"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="medicines-options"
+                    >
+                        <i class="fas fa-capsules text-blue"></i>
+                        <span class="nav-link-text">{{ __('Medicamentos') }}</span>
                     </a>
+
+                    <div class="collapse" id="medicines-options">
+                        <ul class="nav nav-sm flex-column">
+                            <!-- Nuevo Inscrito -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('medicines.create') }}">
+                                    <i class="fas fa-plus"></i>
+                                    {{ __('Crear') }}
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('medicines.index') }}">
+                                    <i class="fas fa-list"></i>
+                                    {{ __('Ver Todos') }}
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('medicines.index') }}">
+                                    <i class="fas fa-list"></i>
+                                    {{ __('Formas Farmacéuticas') }}
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('medicines.index') }}">
+                                    <i class="fas fa-list"></i>
+                                    {{ __('Unidades de Concentración') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Fin funciones para inscritos -->
                 </li>
+                <!-- End of Collapse -->
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fas fa-stethoscope text-orange"></i> {{ __('Enfermedades') }}
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="fas fa-hands-helping text-info"></i> {{ __('Beneficios') }}

@@ -21867,3 +21867,20 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 
     height: 3px;
 }
+
+/* Custom styles */
+
+.custom-card-form, 
+.custom-card-form > form {
+    display: flex;
+}
+
+.custom-card-form {
+    justify-content: space-evenly;
+}
+
+
+.options-td {
+    display: flex;
+    justify-content: space-evenly;
+}
