@@ -121,13 +121,13 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{route('needs.index', ['type' => 1])}}">
                         <i class="fas fa-stethoscope text-orange"></i> {{ __('Enfermedades') }}
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{route('needs.index', ['type' => 2])}}">
                         <i class="fas fa-hands-helping text-info"></i> {{ __('Beneficios') }}
                     </a>
                 </li>

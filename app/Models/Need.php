@@ -15,4 +15,13 @@ class Need extends Model
     protected $hidden = [
         'created_at', 'updated_at'
     ];
+
+    /**
+     * Scopes the need model depending on the id.
+     * 
+     * @param nt_id references the need_type_id sent in the scope
+     */
+    public function scopeSearchById ($query, $nt_id) {
+        return $query->where('need_type_id', $nt_id)->orderBy('name', 'asc');
+    }
 }

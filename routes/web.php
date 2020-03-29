@@ -36,8 +36,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('inscribedUsers', 'InscribedUsersController');
 
 	//Medicines
-	Route::resource('medicines', 'Needs\MedicineController');
-	Route::resource('forms', 'Needs\MedicineFormController');
-	Route::resource('units', 'Needs\MedicineUnitController');
+	Route::resource('medicines', 'Medicines\MedicineController');
+	Route::resource('forms', 'Medicines\MedicineFormController');
+	Route::resource('units', 'Medicines\MedicineUnitController');
+
+	//Needs (diseases and specific benefits)
+	Route::resource('needs', 'NeedController');
 });
 

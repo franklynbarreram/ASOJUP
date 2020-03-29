@@ -1,22 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Needs;
+namespace App\Http\Controllers\Medicines;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Models\Need;
+use App\Models\MedicineForm;
 
-class DiseaseController extends Controller
+class MedicineFormController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index (Request $request)
     {
-        return Need::all();
+        $forms = MedicineForm::orderBy('name', 'asc')->paginate(10);
+
+        return view ('admin.medicines.forms.index', [
+            'forms' =>  $forms
+        ]);
     }
 
     /**
@@ -26,7 +30,7 @@ class DiseaseController extends Controller
      */
     public function create()
     {
-        //
+        return view ('admin.medicines.forms.create');
     }
 
     /**
@@ -37,7 +41,18 @@ class DiseaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = ucwords($request->name);
+        $short_name = strtoupper($request->short_name);
+
+        $med_form = MedicineForm::create([
+            'name'  =>  $name,
+            'short_name'    =>  $short_name
+        ]);
+
+        return redirect()->route('forms.index', [
+            'notification'  =>  'Se ha creado la forma farmacéutica exitosamente',
+            'success'       =>  true  
+        ]);
     }
 
     /**
@@ -59,7 +74,11 @@ class DiseaseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $med_form = MedicineForm::find($id);
+
+        return view('admin.medicines.forms.edit', [
+            'med_form'  =>  $med_form
+        ]);
     }
 
     /**
@@ -71,7 +90,21 @@ class DiseaseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $med_form = MedicineForm::find($id);
+
+        $name = ucwords($request->name);
+        $short_name = strtoupper($request->short_name);
+
+        $med_form->name = $name;
+        $med_form->short_name = $short_name;
+
+        $med_form->save();
+
+        return redirect()->route('forms.index')->with(
+            'notification', 'Se ha editado la forma farmacéutica exitosamente.'
+        )->with(
+            'success', true
+        );
     }
 
     /**

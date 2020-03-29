@@ -5,7 +5,6 @@
     <!-- Search bar -->
     <div class="col-5 custom-card-form">
         <form method="GET" action="{{route($search_route)}}">
-            {{ csrf_field() }}
             <div class="form-group mb-0">
                 <div class="input-group input-group-alternative">
                     <div class="input-group-prepend">
@@ -13,6 +12,12 @@
                     </div>
 
                     <input class="form-control" placeholder="Buscar" type="text" name="search">
+
+                    @if (isset($extra_params))
+                        @foreach ($extra_params as $ep => $val)
+                            <input type="hidden" name="{{$ep}}" value="{{$val}}">
+                        @endforeach
+                    @endif
                 </div>
             </div>
 
@@ -20,8 +25,14 @@
         </form>
         
         <!-- Create button -->
-        <a href="{{route($create_route)}}" class="btn btn-primary">
-            <i class="fas fa-plus-circle"></i> Crear
-        </a>
+        @if (!isset($extra_params))
+            <a href="{{route($create_route)}}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Crear
+            </a>
+        @else
+            <a href="{{route($create_route, $extra_params)}}" class="btn btn-primary">
+                <i class="fas fa-plus-circle"></i> Crear
+            </a>
+        @endif
     </div>
 </div>
