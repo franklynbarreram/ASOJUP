@@ -108,7 +108,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('medicines.index') }}">
+                                <a class="nav-link" href="{{ route('units.index') }}">
                                     <i class="fas fa-balance-scale"></i>
                                     {{ __('Unidades de Concentración') }}
                                 </a>

@@ -14,9 +14,13 @@ class MedicineUnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index ()
     {
-        //
+        $units = MedicineUnit::orderBy('name', 'asc')->paginate(15);
+
+        return view('admin.medicines.units.index', [
+            'units' =>  $units
+        ]);
     }
 
     /**
@@ -24,9 +28,9 @@ class MedicineUnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create ()
     {
-        //
+        return view('admin.medicines.units.create');
     }
 
     /**
@@ -37,7 +41,18 @@ class MedicineUnitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = ucwords($request->name);
+        $short_name = $request->short_name;
+
+        $med_unit = MedicineUnit::create([
+            'name'  =>  $name,
+            'short_name'    =>  strtolower($short_name)
+        ]);
+
+        return redirect()->route('units.index', [
+            'notification'  =>  'Se ha creado la unidad de concentración exitosamente',
+            'success'       =>  true  
+        ]);
     }
 
     /**
@@ -59,7 +74,11 @@ class MedicineUnitController extends Controller
      */
     public function edit($id)
     {
-        //
+        $med_unit = MedicineUnit::find($id);
+
+        return view('admin.medicines.units.edit', [
+            'med_unit'  =>  $med_unit
+        ]);
     }
 
     /**
@@ -71,7 +90,21 @@ class MedicineUnitController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $med_unit = MedicineUnit::find($id);
+
+        $name = ucwords($request->name);
+        $short_name = strtoupper($request->short_name);
+
+        $med_unit->name = $name;
+        $med_unit->short_name = $short_name;
+
+        $med_unit->save();
+
+        return redirect()->route('units.index')->with(
+            'notification', 'Se ha editado la unidad de concentración exitosamente.'
+        )->with(
+            'success', true
+        );
     }
 
     /**

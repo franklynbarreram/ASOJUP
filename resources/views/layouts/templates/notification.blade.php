@@ -1,9 +1,9 @@
 <div class="{{$alert_class}}" role="alert">
     <span class="alert-icon">
         @if ($success == true) 
-            <i class="fas fa-ban"></i> 
+            <i class="fas fa-check-circle"></i> 
         @else
-            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-ban"></i>
         @endif
     </span>
     <span class="alert-text">
