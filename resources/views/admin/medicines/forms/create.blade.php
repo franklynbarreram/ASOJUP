@@ -19,7 +19,7 @@
                 @endif
 
                 <h1 class="card-title">Nueva Forma Farmacéutica</h1>
-                <form method="POST" action="{{route('forms.store')}}">
+                <form method="POST" action="{{route('forms.store')}}" id="form_farm">
                     {{ csrf_field() }}
                     
                     <div class="row">
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="row">
-                        <button class="btn btn-success" type="submit">
+                        <button class="btn btn-success" type="submit" id="btn">
                             Crear
                         </button>
 
@@ -57,5 +57,60 @@
 
     let sidebar_options = document.getElementById('medicines-options');
     sidebar_options.classList.add('show');
+   
+
+
+    $('#btn').attr('disabled', true);
+    let name = false;
+    let description=false;
+    $('#name').keyup(function() {
+
+        var nombre = $('#name').val();
+
+        if (nombre != "") {
+
+            var expresion = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/;
+            if (!expresion.test(nombre)) {
+                $("#row-conteiner").parent().before('<div class="alert alert-warning"><strong>ERROR: </strong>No se permiten números ni caracteres especiales en el nombre</div>')
+                /*   $('#btn').attr('disabled', true); */
+                name = false;
+            } else {
+                $(".alert").remove();
+                name = true;
+                /*   $('#btn').attr('disabled', true); */
+            }
+        }
+    });
+
+    $('#short_name').keyup(function() {
+
+        var descripcion = $('#short_name').val();
+
+        if (descripcion != "") {
+
+            var expresion = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/;
+            if (!expresion.test(descripcion)) {
+                $("#row-conteiner").parent().before('<div class="alert alert-warning"><strong>ERROR: </strong>No se permiten números ni caracteres especiales en la abreviación</div>')
+                /*   $('#btn').attr('disabled', true); */
+                description = false;
+            } else {
+                $(".alert").remove();
+                description= true;
+                /*   $('#btn').attr('disabled', true); */
+            }
+        }
+    });
+
+    $('#form_farm').keyup(function(){
+         
+         if(description ==true && name ==true ){
+        
+             $('#btn').attr('disabled', false);
+         }else{
+             $('#btn').attr('disabled', true);
+         }
+     });
+     
+
 </script>
 @endpush
