@@ -22,5 +22,14 @@ class UsersTableSeeder extends Seeder
             'role_id'   =>  1,
             'remember_token'    =>  null,
         ]);
+
+        User::create([
+            'name'  =>  'Delegado',
+            'email' =>  'delegado@delegado.com',
+            'password'  =>  bcrypt('123456'),
+            'zone_id'   =>  1,
+            'role_id'   =>  2,
+            'remember_token'    =>  null,
+        ]);
     }
 }

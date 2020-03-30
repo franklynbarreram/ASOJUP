@@ -73,9 +73,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{{ route('profile.update') }}" autocomplete="off">
-                            @csrf
-                            @method('put')
+                        <form method="POST" action="{{ route('profile.update') }}" autocomplete="off">
+                        {{ csrf_field() }}
+                        {{ method_field('PUT') }}
 
                             <h6 class="heading-small text-muted mb-4">{{ __('User information') }}</h6>
                             
@@ -117,8 +117,8 @@
                         </form>
                         <hr class="my-4" />
                         <form method="post" action="{{ route('profile.password') }}" autocomplete="off">
-                            @csrf
-                            @method('put')
+                            {{ csrf_field() }}
+                            {{ method_field('PUT') }}
 
                             <h6 class="heading-small text-muted mb-4">{{ __('Password') }}</h6>
 

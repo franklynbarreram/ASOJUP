@@ -18,6 +18,7 @@ class CreateInscribedUsersTable extends Migration
                 $table->increments('id');
                 $table->string('name');
                 $table->string('surname');
+                $table->string('password');
                 $table->string('email')->unique();
                 $table->string('identification');
                 $table->string('cicpc_id');

@@ -32,8 +32,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+
+	//Edit inscribedUsers
+	Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
+	Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
+	Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
 	
 	Route::resource('inscribedUsers', 'InscribedUsersController');
+
+
 
 	//Medicines
 	Route::resource('medicines', 'Medicines\MedicineController');
