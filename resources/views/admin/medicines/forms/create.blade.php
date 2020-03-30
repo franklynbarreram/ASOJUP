@@ -22,7 +22,7 @@
                 <form method="POST" action="{{route('forms.store')}}" id="form_farm">
                     {{ csrf_field() }}
                     
-                    <div class="row">
+                    <div class="row" id="row-conteiner">
                         <div class="form-group col-6">
                             <label for="name" class="form-control-label">Nombre</label>
                             <input class="form-control" name="name" type="text" placeholder="Ingresa el nombre" id="name">
