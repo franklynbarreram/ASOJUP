@@ -131,7 +131,7 @@
           
          });
 
-        $('#form_medicine').click(function(){
+        $('#form_medicine').keyup(function(){
          
             if(medicine_form ==true && name ==true && concentration==true && med_unit_id==true){
            
