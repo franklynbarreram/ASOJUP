@@ -115,6 +115,15 @@
              }
           
          });
+         let cantidad=false;
+         $('#box_quantity').click(function(){
+             if($('#box_quantity').val()!=null){
+                cantidad=true;
+             }
+          
+         });
+
+
          let concentration=false;
          $('#concentration').click(function(){
              if($('#concentration').val()!=null){
@@ -127,14 +136,15 @@
          $('#med_unit_id').click(function(){
              if($('#med_unit_id').val()!=null){
                 med_unit_id=true;
+              
              }
           
          });
 
-        $('#form_medicine').keyup(function(){
-         
-            if(medicine_form ==true && name ==true && concentration==true && med_unit_id==true){
-           
+        $('#form_medicine').click(function(){
+            
+            if(medicine_form ==true && name ==true && concentration==true &&cantidad==true && med_unit_id==true){
+          
                 $('#btn').attr('disabled', false);
             }else{
                 $('#btn').attr('disabled', true);
