@@ -67,8 +67,8 @@ class MedicineController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput($request->input())->with('notification_error', '¡Ha ocurrido un error!');
             }
             */
-            $medicine = Medicine::create($request->except('_token'));
-
+           $medicine = Medicine::create($request->except('_token')); 
+           
             return redirect()->route('forms.index')->with(
                 'notification', 'Se ha creado la medicina exitosamente.'
             )->with(

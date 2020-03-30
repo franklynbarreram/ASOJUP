@@ -2,7 +2,7 @@
 
 @section('content')
     @include('layouts.templates.topbar')
-  
+    
     <div class="container-fluid mt--7">
         <div class="card" style="margin-top: 12%;">
             <div class="card-body">
