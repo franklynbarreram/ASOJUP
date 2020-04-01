@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Models\InscribedUser;
 
+use App\Models\Need;
+use App\Models\Medicine;
+use App\Models\MedicineForm;
+use App\Models\MedicineUnit;
+
 class InscribedUsersController extends Controller
 {
     /**
@@ -25,7 +30,20 @@ class InscribedUsersController extends Controller
      */
     public function create ()
     {
-        return view('inscribed_users.create');
+        $diseases = Need::diseases()->get();
+        $benefits = Need::benefits()->get();
+        $medicines = Medicine::orderBy('name', 'asc')->get();
+
+        $med_units = MedicineUnit::orderBy('name', 'asc')->get();
+        $med_forms = MedicineForm::orderBy('name', 'asc')->get();
+
+        return view('admin.inscribed_users.create', [
+            'diseases'  =>  $diseases,
+            'benefits'  =>  $benefits,
+            'medicines' =>  $medicines,
+            'med_units' =>  $med_units,
+            'med_forms' =>  $med_forms
+        ]);
     }
 
     /**

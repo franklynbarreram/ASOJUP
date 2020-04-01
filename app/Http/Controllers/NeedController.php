@@ -167,4 +167,18 @@ class NeedController extends Controller
     {
         //
     }
+
+    public function ajaxStore (Request $request)  {
+        try {
+            $need = Need::create($request->all());
+            
+            return response()->json([
+                'status'    =>  'success',
+                'data'      =>  $need
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
 }

@@ -24,4 +24,12 @@ class Need extends Model
     public function scopeSearchById ($query, $nt_id) {
         return $query->where('need_type_id', $nt_id)->orderBy('name', 'asc');
     }
+
+    public function scopeDiseases ($query) {
+        return $query->where('need_type_id', 1)->orderBy('name', 'asc');
+    }
+
+    public function scopeBenefits ($query) {
+        return $query->where('need_type_id', 2)->orderBy('name', 'asc');
+    }
 }

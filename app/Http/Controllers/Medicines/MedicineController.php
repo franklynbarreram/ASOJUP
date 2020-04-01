@@ -54,6 +54,8 @@ class MedicineController extends Controller
     public function store(Request $request)
     {
         try {
+
+            return $request->all();
             /*
             $validator = \Validator::make($request->all(), [
                 'name'          =>  'required|string',
@@ -152,5 +154,27 @@ class MedicineController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * 
+     */
+    public function ajaxStore (Request $request) {
+        try {
+
+            $medicine = Medicine::create($request->all());
+
+            return response()->json([
+                'status'    =>  'success',
+                'data'      =>  [
+                    'id'    =>  $medicine->id,
+                    'name'  =>  $medicine->fullName
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 }

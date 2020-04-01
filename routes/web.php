@@ -36,11 +36,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('inscribedUsers', 'InscribedUsersController');
 
 	//Medicines
+	Route::post('medicines/ajax/store', 'Medicines\MedicineController@ajaxStore')->name('medicines.ajax.store');
 	Route::resource('medicines', 'Medicines\MedicineController');
 	Route::resource('forms', 'Medicines\MedicineFormController');
 	Route::resource('units', 'Medicines\MedicineUnitController');
 
 	//Needs (diseases and specific benefits)
+	Route::post('needs/ajax/store', 'NeedController@ajaxStore');
 	Route::resource('needs', 'NeedController');
 });
 

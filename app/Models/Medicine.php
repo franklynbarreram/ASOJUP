@@ -21,6 +21,10 @@ class Medicine extends Model
         return $this->concentration . ' (' . $this->unit->short_name .  ')';
     }
 
+    public function getFullNameAttribute () {
+        return $this->name . ' - ' . $this->concentration . ' (' . $this->unit->short_name .  ')';
+    }
+
     public function getPresentationAttribute () {
         return $this->form->name;
     }
