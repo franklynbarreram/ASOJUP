@@ -69,7 +69,7 @@ class MedicineController extends Controller
             */
            $medicine = Medicine::create($request->except('_token')); 
            
-            return redirect()->route('forms.index')->with(
+            return redirect()->route('medicines.index')->with(
                 'notification', 'Se ha creado la medicina exitosamente.'
             )->with(
                 'success', true
@@ -143,6 +143,22 @@ class MedicineController extends Controller
         );
     }
 
+    public function delete(Request $request)
+    {
+        //
+        try {
+         
+         $deletedRows = Medicine::where('id',$request->id)->delete(); 
+             
+       return redirect()->route('medicines.index')->with(
+            'notification', 'Se ha eliminado la medicina exitosamente.'
+        )->with(
+            'success', true
+        ); 
+         }catch(\Exception $e){
+            return response()->json($e->getMessage());
+         }   
+    }        
     /**
      * Remove the specified resource from storage.
      *
@@ -152,5 +168,14 @@ class MedicineController extends Controller
     public function destroy($id)
     {
         //
+        $medicine = Medicine::find($id);
+        $med_forms = MedicineForm::all();
+        $med_units = MedicineUnit::all();
+
+        return view ('admin.medicines.edit', [
+            'medicine'  =>  $medicine,
+            'med_forms' =>  $med_forms,
+            'med_units' =>  $med_units
+        ]);
     }
 }

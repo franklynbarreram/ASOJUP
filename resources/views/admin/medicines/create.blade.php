@@ -115,13 +115,8 @@
              }
           
          });
-         let cantidad=false;
-         $('#box_quantity').click(function(){
-             if($('#box_quantity').val()!=null){
-                cantidad=true;
-             }
-          
-         });
+         let cantidad=true;
+         
 
 
          let concentration=false;
