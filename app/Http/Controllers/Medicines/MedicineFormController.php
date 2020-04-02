@@ -16,7 +16,7 @@ class MedicineFormController extends Controller
      */
     public function index (Request $request)
     {
-        $forms = MedicineForm::orderBy('name', 'asc')->paginate(10);
+        $forms = MedicineForm::orderBy('id', 'asc')->paginate(15);
 
         return view ('admin.medicines.forms.index', [
             'forms' =>  $forms
@@ -113,8 +113,15 @@ class MedicineFormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
         //
+        $deletedRows = MedicineForm::where('id',$request->id)->delete(); 
+        return redirect()->route('forms.index')->with(
+            'notification', 'Se ha editado la forma farmacéutica exitosamente.'
+        )->with(
+            'success', true
+        );
+
     }
 }
