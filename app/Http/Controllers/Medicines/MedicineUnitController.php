@@ -116,6 +116,7 @@ class MedicineUnitController extends Controller
     public function delete(Request $request)
     {
         //
+        
         $deletedRows = MedicineUnit::where('id',$request->id)->delete(); 
         return redirect()->route('units.index')->with(
             'notification', 'Se ha eliminado la unidad de medida exitosamente.'

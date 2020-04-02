@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('medicines/eliminar', 'Medicines\MedicineController@delete');
 	Route::post('forms/eliminar', 'Medicines\MedicineFormController@delete');
 	Route::post('units/eliminar', 'Medicines\MedicineUnitController@delete');
+	Route::post('needs/eliminar', 'NeedController@delete');
 	//Needs (diseases and specific benefits)
 	Route::resource('needs', 'NeedController');
 });
