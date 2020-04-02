@@ -75,7 +75,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/eliminar" method="post">
+            <form action="/medicines/eliminar" method="post">
             {{csrf_field()}}
             <div class="modal-body">
                 ¿Esta seguro de eliminar esta medicina?

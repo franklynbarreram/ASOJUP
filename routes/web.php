@@ -40,8 +40,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('forms', 'Medicines\MedicineFormController');
 	Route::resource('units', 'Medicines\MedicineUnitController');
 
-	Route::post('eliminar', 'Medicines\MedicineController@delete');
-
+	Route::post('medicines/eliminar', 'Medicines\MedicineController@delete');
+	Route::post('forms/eliminar', 'Medicines\MedicineFormController@delete');
 	//Needs (diseases and specific benefits)
 	Route::resource('needs', 'NeedController');
 });

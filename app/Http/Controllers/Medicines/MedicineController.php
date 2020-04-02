@@ -165,17 +165,5 @@ class MedicineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-        $medicine = Medicine::find($id);
-        $med_forms = MedicineForm::all();
-        $med_units = MedicineUnit::all();
-
-        return view ('admin.medicines.edit', [
-            'medicine'  =>  $medicine,
-            'med_forms' =>  $med_forms,
-            'med_units' =>  $med_units
-        ]);
-    }
+   
 }
