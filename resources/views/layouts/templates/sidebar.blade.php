@@ -40,7 +40,7 @@
                 <!-- Collapse -->
                 <li class="nav-item">
                     <!-- Opciones para inscritos -->
-                    <a class="nav-link collapsed" href="#inscribed-users-options" 
+                    <a class="nav-link collapsed" href="#inscribed-users-options" id="inscribed-users-link"
                         data-toggle="collapse"
                         role="button"
                         aria-expanded="false"
@@ -60,7 +60,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
+                                <a class="nav-link" href="{{ route('inscribedUsers.index') }}">
+                                    <i class="fas fa-list-alt"></i>
                                     {{ __('Ver Todos') }}
                                 </a>
                             </li>

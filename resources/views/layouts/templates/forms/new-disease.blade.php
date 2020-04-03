@@ -19,7 +19,7 @@
 
                             <div class="form-group mb-3">
                                 <div class="input-group input-group-merge input-group-alternative">
-                                    <input class="form-control" placeholder="Descripción" name="description" type="text" id="description">
+                                    <input class="form-control" placeholder="Descripción" name="description" type="text" id="desc">
                                 </div>
                             </div>
 
@@ -44,15 +44,13 @@
     btn_submit_disease.click('on', function () {
 
         let name = $("#disease_name").val();
-        let description = $("#description").val();
+        let description = $("#desc").val();
 
         let post_body = {
             name: name,
             description: description,
             need_type_id: 1
         };
-
-        console.log(post_body);
         
         let token = $( "input[name='_token']" ).val();
         let url = {!! json_encode($url_create_disease) !!}

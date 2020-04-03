@@ -10,49 +10,61 @@
     <div class="container-fluid mt--7">
         <div class="card" style="margin-top: 12%;">
             <div class="card-body">
-                <h1 class="card-title">Nuevo Inscrito</h1>
+                @if (\Session::has('notification'))
+                    @include('layouts.templates.notification', [
+                        'success'   =>  \Session::get('success'),
+                        'message'   =>  \Session::get('notification'),
+                        'alert_class'   =>  \Session::get('success') == true ? 
+                            'alert alert-success alert-dismissible fade show' :
+                            'alert alert-danger alert-dismissible fade show'
+                    ])
+                @endif
 
-                <form action="{{route('inscribedUsers.store')}}" method="POST">
+                <h1 class="card-title">Editar Inscrito</h1>
+
+                <form action="{{route('inscribedUsers.update', $inscribed->id)}}" method="POST">
                     {{ csrf_field() }}
+                    {{ method_field('PUT') }}
+                    
                     <div class="row">
                         <div class="form-group col-6">
                             <label for="name" class="form-control-label">Nombre</label>
-                            <input class="form-control" name="name" type="text" placeholder="Ingresa el nombre" id="name">
+                            <input class="form-control" name="name" type="text" value="{{$inscribed->name}}" id="name">
                         </div>
     
                         <div class="form-group col-6">
                             <label for="surname" class="form-control-label">Apellido</label>
-                            <input class="form-control" name="surname" type="text" placeholder="Ingresa el apellido" id="surname">
+                            <input class="form-control" name="surname" type="text" value="{{$inscribed->surname}}" id="surname">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-6">
                             <label for="email" class="form-control-label">Email</label>
-                            <input class="form-control" name="email" type="email" placeholder="name@example.com" id="email">
+                            <input class="form-control" name="email" type="email" value="{{$inscribed->email}}" id="email">
                         </div>
 
                         <div class="form-group col-6">
                             <label for="phone" class="form-control-label">Teléfono</label>
-                            <input class="form-control" name="phone" type="text" placeholder="0424 - 6554482" id="phone">
+                            <input class="form-control" name="phone" type="text" value="{{$inscribed->phone}}" id="phone">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-6">
                             <label for="identification" class="form-control-label">Cédula</label>
-                            <input class="form-control" name="identification" type="text" placeholder="123456789" id="identification">
+                            <input class="form-control" name="identification" type="text" value="{{$inscribed->identification}}" id="identification">
                         </div>
                         
                         <div class="form-group col-6">
                             <label for="cicpc_id" class="form-control-label">Identificación CICPC</label>
-                            <input class="form-control" name="cicpc_id" type="text" placeholder="123456789" id="cicpc_id">
+                            <input class="form-control" name="cicpc_id" type="text" value="{{$inscribed->cicpc_id}}"  id="cicpc_id">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="address" class="form-control-label">Dirección</label>
-                        <input class="form-control" name="address" type="text" placeholder="Calle #2 Carrera #3 C-07" id="address">
+                        <input class="form-control" name="address" type="text" value="{{$inscribed->address}}"  id="address">
                     </div>
                     
 
@@ -64,7 +76,12 @@
                             <label for="diseases[]">Enfermedades</label>
                             <select class="form-control" name="diseases[]" id="diseases-sel" multiple="multiple">
                                 @foreach($diseases as $d)
-                                    <option value="{{$d->id}}">{{$d->name}}</option>
+                                <option 
+                                    value="{{$d->id}}"
+                                    @if($inscribed->hasDisease($d->id)) selected @endif
+                                >
+                                    {{$d->name}}
+                                </option>
                                 @endforeach
                             </select>
 
@@ -77,7 +94,12 @@
                             <label for="benefits[]">Solicitudes Especiales</label>
                             <select class="form-control" name="benefits[]" id="benefits-sel" multiple="multiple">
                                 @foreach($benefits as $d)
-                                    <option value="{{$d->id}}">{{$d->name}}</option>
+                                    <option 
+                                        value="{{$d->id}}"
+                                        @if($inscribed->hasBenefit($d->id)) selected @endif
+                                    >
+                                        {{$d->name}}
+                                    </option>
                                 @endforeach
                             </select>
 
@@ -90,7 +112,12 @@
                             <label for="medicines[]">Medicinas</label>
                             <select class="form-control" name="medicines[]" id="medicines-sel" multiple="multiple">
                                 @foreach($medicines as $d)
-                                    <option value="{{$d->id}}">{{$d->fullName}}</option>
+                                    <option 
+                                        value="{{$d->id}}"
+                                        @if($inscribed->hasMedicine($d->id)) selected @endif
+                                    >
+                                        {{$d->fullName}}
+                                    </option>
                                 @endforeach
                             </select>
 
@@ -102,8 +129,12 @@
 
                     <div class="row">
                         <button type="submit" class="btn btn-success">
-                            Registrar
+                            Editar
                         </button>
+
+                        <a href="{{route('inscribedUsers.index')}}" class="btn btn-danger">
+                            Regresar
+                        </a>
                     </div>
 
                 </form>
