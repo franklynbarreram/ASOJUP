@@ -33,7 +33,17 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 	
+	Route::put('inscribedUsers/inhabilitate/{id}', 'InscribedUsersController@ajaxInhabilitate');
 	Route::resource('inscribedUsers', 'InscribedUsersController');
+
+	//Survivors
+	Route::group(['prefix' => 'survivors', 'as' => 'survivors.'], function () {
+		Route::get('', 'SurvivorController@index')->name('index');
+		Route::get('create', 'SurvivorController@create')->name('create');
+		Route::post('', 'SurvivorController@store')->name('store');
+		Route::get('{id}/edit', 'SurvivorController@edit')->name('edit');
+		Route::put('{id}', 'SurvivorController@update')->name('update');
+	});
 
 	//Medicines
 	Route::post('medicines/ajax/store', 'Medicines\MedicineController@ajaxStore')->name('medicines.ajax.store');

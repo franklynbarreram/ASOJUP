@@ -23,6 +23,8 @@ class InscribedUser extends Model
         'created_at', 'updated_at'
     ];
 
+
+    /**-------- Relations ------ */
     public function medicines () {
         return $this->belongsToMany('App\Models\Medicine', 'inscribed_users_medicines');
     }
@@ -31,8 +33,16 @@ class InscribedUser extends Model
         return $this->belongsToMany('App\Models\Need', 'inscribed_users_needs');
     }
 
-    /**-------- Scopes ----------*/
+    public function survivors () {
+        return $this->hasMany('App\Models\Survivor', 'inscribed_user_id');
+    }
 
+    /**-------- Mutators ------- */
+    public function getFullNameAttribute () {
+        return $this->name . ' ' . $this->surname; 
+    }
+
+    /**-------- Scopes ----------*/
     /**
      * Get an array with only diseases ids
      */

@@ -235,4 +235,26 @@ class InscribedUsersController extends Controller
     {
         //
     }
+
+    /**
+     * 
+     */
+    public function ajaxInhabilitate (Request $request, $id) {
+        try {
+            $inscribed = InscribedUser::find($id);
+
+            $inscribed->active = false;
+            $inscribed->save();
+
+            return response()->json([
+                'status'    =>  'success',
+                'data'  =>  $inscribed
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'    =>  'failed',
+                'message'   =>  $e->getMessage()
+            ]);
+        }
+    }
 }
