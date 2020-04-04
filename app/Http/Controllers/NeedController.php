@@ -163,9 +163,19 @@ class NeedController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+        
+        $deletedRows = Need::where('id',$request->id)->delete(); 
+       
+
+        return redirect()->route(
+            'needs.index', ['type' => $request->type]
+        )->with(
+            'notification', 'Se ha eliminado la necesidad satisfactoriamente'
+        )->with(
+            'success', true
+        );  
     }
 
     public function ajaxStore (Request $request)  {

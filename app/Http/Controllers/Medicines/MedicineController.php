@@ -69,9 +69,9 @@ class MedicineController extends Controller
                 return redirect()->back()->withErrors($validator)->withInput($request->input())->with('notification_error', '¡Ha ocurrido un error!');
             }
             */
-            $medicine = Medicine::create($request->except('_token'));
-
-            return redirect()->route('forms.index')->with(
+           $medicine = Medicine::create($request->except('_token')); 
+           
+            return redirect()->route('medicines.index')->with(
                 'notification', 'Se ha creado la medicina exitosamente.'
             )->with(
                 'success', true
@@ -145,12 +145,29 @@ class MedicineController extends Controller
         );
     }
 
+    public function delete(Request $request)
+    {
+        //
+        try {
+         
+         $deletedRows = Medicine::where('id',$request->id)->delete(); 
+             
+       return redirect()->route('medicines.index')->with(
+            'notification', 'Se ha eliminado la medicina exitosamente.'
+        )->with(
+            'success', true
+        ); 
+         }catch(\Exception $e){
+            return response()->json($e->getMessage());
+         }   
+    }        
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+<<<<<<< HEAD
     public function destroy($id)
     {
         //
@@ -177,4 +194,7 @@ class MedicineController extends Controller
             return response()->json($e->getMessage());
         }
     }
+=======
+   
+>>>>>>> 99b2c4a7a854a5295d0d1cf5b81b3ec16fdd32eb
 }

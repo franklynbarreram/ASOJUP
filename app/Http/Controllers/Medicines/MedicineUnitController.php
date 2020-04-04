@@ -16,7 +16,7 @@ class MedicineUnitController extends Controller
      */
     public function index ()
     {
-        $units = MedicineUnit::orderBy('name', 'asc')->paginate(15);
+        $units = MedicineUnit::orderBy('id', 'asc')->paginate(15);
 
         return view('admin.medicines.units.index', [
             'units' =>  $units
@@ -113,8 +113,15 @@ class MedicineUnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
         //
+        
+        $deletedRows = MedicineUnit::where('id',$request->id)->delete(); 
+        return redirect()->route('units.index')->with(
+            'notification', 'Se ha eliminado la unidad de medida exitosamente.'
+        )->with(
+            'success', true
+        );
     }
 }

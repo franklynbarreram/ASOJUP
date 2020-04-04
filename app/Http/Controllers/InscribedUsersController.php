@@ -14,6 +14,9 @@ use App\Models\Medicine;
 use App\Models\MedicineForm;
 use App\Models\MedicineUnit;
 
+use Illuminate\Support\Facades\Hash;
+use App\Rules\CurrentPasswordCheckRule;
+
 class InscribedUsersController extends Controller
 {
     /**
@@ -169,7 +172,6 @@ class InscribedUsersController extends Controller
             'address'           =>  $request->address
         ]);
 
-
         //Medicines
         if (isset($request->medicines)) {
             InscribedUserMedicine::where('inscribed_user_id', $inscribed->id)->delete();;
@@ -256,5 +258,71 @@ class InscribedUsersController extends Controller
                 'message'   =>  $e->getMessage()
             ]);
         }
+    }
+
+    public function edit_profile(Request $request, $id)
+    {
+        $inscrito = InscribedUser::find($id);
+        return view('inscribed_users.edit',['inscrito'=>$inscrito]);
+    }
+
+    /**
+     * Update the profile
+     *
+     * @param  \App\Http\Requests\ProfileRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update_profile(Request $request)
+    {
+
+        try{
+            $inscrito = InscribedUser::find($request->id); 
+            $inscrito->update($request->all());
+            $inscrito->save();
+
+            return back()->withStatus(__('Datos actualizados correctamente.'));
+
+        } catch(\Exception $e){
+            return back()->with('ErrorSave', 'Ha ocurrido un error.');
+        }
+    }
+
+    /**
+     * Change the password
+     *
+     * @param  \App\Http\Requests\PasswordRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function password_profile(Request $request)
+    {
+        $messages = [
+            'confirmed' => 'La confirmación de contraseña no coincide.',
+            'different'=>'La nueva contraseña no puede ser igual a la anterior'
+        ];
+
+        $this->validate($request, [
+            'old_password' => ['required'],
+            'password' => ['required', 'confirmed', 'different:old_password'],
+            'password_confirmation' => ['required'],
+        ],$messages);
+
+
+        $data = $request->all();
+ 
+        $user = InscribedUser::find($request->id);
+        if(!Hash::check($data['old_password'], $user->password)){
+             return back()->with('ErrorSavePassword','La contraseña ingresada no coincide con la contraseña antigua');
+        }else{
+            try{
+                
+                $user->password = bcrypt($data['password']);
+                $user->save();
+                return back()->withPasswordStatus(__('Contraseña actualizada correctamente.'));
+    
+            } catch(\Exception $e){
+                return back()->with('ErrorSavePassword', 'Ha ocurrido un error.');
+            }
+        }
+       
     }
 }

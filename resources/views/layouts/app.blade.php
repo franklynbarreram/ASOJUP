@@ -19,6 +19,7 @@
         <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
     
         @yield('custom-css')
+        <link type="text/css" href="{{ asset('css') }}/style.css" rel="stylesheet">
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
