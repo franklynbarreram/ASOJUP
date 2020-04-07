@@ -64,5 +64,10 @@ Route::group(['middleware' => 'auth'], function () {
 	//Needs (diseases and specific benefits)
 	Route::post('needs/ajax/store', 'NeedController@ajaxStore');
 	Route::resource('needs', 'NeedController');
+
+	//Listing
+	Route::get('listings/history/{id}', 'ListingController@history')->name('listings.history');
+	Route::get('listings/search', 'ListingController@search')->name('listings.search');
+	Route::resource('listings', 'ListingController');
 });
 

@@ -54,8 +54,6 @@ class MedicineController extends Controller
     public function store(Request $request)
     {
         try {
-
-            return $request->all();
             /*
             $validator = \Validator::make($request->all(), [
                 'name'          =>  'required|string',
@@ -167,7 +165,6 @@ class MedicineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-<<<<<<< HEAD
     public function destroy($id)
     {
         //
@@ -194,7 +191,5 @@ class MedicineController extends Controller
             return response()->json($e->getMessage());
         }
     }
-=======
    
->>>>>>> 99b2c4a7a854a5295d0d1cf5b81b3ec16fdd32eb
 }

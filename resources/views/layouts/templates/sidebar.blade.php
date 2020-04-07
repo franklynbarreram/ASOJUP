@@ -39,6 +39,40 @@
 
                 <!-- Collapse -->
                 <li class="nav-item">
+                <!-- Opciones para inscritos -->
+                <a class="nav-link collapsed" href="#listing-options" id="listing-link"
+                    data-toggle="collapse"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="listing-options"
+                >
+                    <i class="fas fa-clipboard-list"></i>
+                    <span class="nav-link-text">{{ __('Listados') }}</span>
+                </a>
+
+                <div class="collapse" id="listing-options">
+                    <ul class="nav nav-sm flex-column">
+                        <!-- Nuevo Inscrito -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('listings.create') }}">
+                                <i class="fas fa-plus"></i>
+                                {{ __('Nuevo') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('listings.index') }}">
+                                <i class="fas fa-list-alt"></i>
+                                {{ __('Ver Todos') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Fin funciones para inscritos -->
+            </li>
+            <!-- End of Collapse -->
+
+                <!-- Collapse Inscritos-->
+                <li class="nav-item">
                     <!-- Opciones para inscritos -->
                     <a class="nav-link collapsed" href="#inscribed-users-options" id="inscribed-users-link"
                         data-toggle="collapse"
@@ -46,7 +80,7 @@
                         aria-expanded="false"
                         aria-controls="inscribed-users-options"
                     >
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-users text-green"></i>
                         <span class="nav-link-text">{{ __('Inscritos') }}</span>
                     </a>
 

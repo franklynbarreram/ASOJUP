@@ -86,66 +86,59 @@
     let sidebar_options = document.getElementById('medicines-options');
     sidebar_options.classList.add('show');
    
-   
+    let name=false;
 
-        let name=false;
-       
-        $('#name').keyup(function() {
+    $('#name').keyup(function() {
 
-            var  nombre = $('#name').val();
+        var  nombre = $('#name').val();
 
-            if (nombre != "") {
+        if (nombre != "") {
 
-                var expresion = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/;
-                if (!expresion.test(nombre)) {
-                    $("#row2").parent().before('<div class="alert alert-warning"><strong>ERROR: </strong>No se permiten números ni caracteres especiales en el nombre</div>')
-                  /*   $('#btn').attr('disabled', true); */
-                  name=false;
-                } else {
-                    $(".alert").remove();
-                    name=true;
-                  /*   $('#btn').attr('disabled', true); */
-                }
+            var expresion = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/;
+            if (!expresion.test(nombre)) {
+                $("#row2").parent().before('<div class="alert alert-warning"><strong>ERROR: </strong>No se permiten números ni caracteres especiales en el nombre</div>')
+            /*   $('#btn').attr('disabled', true); */
+            name=false;
+            } else {
+                $(".alert").remove();
+                name=true;
+            /*   $('#btn').attr('disabled', true); */
             }
-        });
-       let medicine_form=false;
-         $('#medicine_form_id').click(function(){
-             if($('#medicine_form_id').val()!=null){
-                medicine_form=true;
-             }
-          
-         });
-         let cantidad=true;
-         
+        }
+    });
 
+    let medicine_form=false;
 
-         let concentration=false;
-         $('#concentration').click(function(){
-             if($('#concentration').val()!=null){
-                concentration=true;
-             }
-          
-         });
+    $('#medicine_form_id').click(function(){
+        if($('#medicine_form_id').val()!=null){
+            medicine_form=true;
+        }
+    
+    });
 
-         let med_unit_id=false;
-         $('#med_unit_id').click(function(){
-             if($('#med_unit_id').val()!=null){
-                med_unit_id=true;
-              
-             }
-          
-         });
+    let cantidad=true;
+    let concentration=false;
 
-        $('#form_medicine').click(function(){
-            
-            if(medicine_form ==true && name ==true && concentration==true &&cantidad==true && med_unit_id==true){
-          
-                $('#btn').attr('disabled', false);
-            }else{
-                $('#btn').attr('disabled', true);
-            }
-        });
+    $('#concentration').click(function(){
+        if($('#concentration').val()!=null){
+            concentration=true;
+        }
+    });
 
-        
+    let med_unit_id=false;
+    $('#med_unit_id').click(function(){
+        if($('#med_unit_id').val()!=null){
+            med_unit_id=true;  
+        }
+    });
+
+    $('#form_medicine').click(function(){
+        if(medicine_form ==true && name ==true && concentration==true &&cantidad==true && med_unit_id==true){
+    
+            $('#btn').attr('disabled', false);
+        }else{
+            $('#btn').attr('disabled', true);
+        }
+    });
 </script>
 @endpush
