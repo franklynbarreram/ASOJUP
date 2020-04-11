@@ -9,27 +9,9 @@
 @include('layouts.templates.topbar')
 
 <div class="container-fluid mt--7">
+
     <div class="card" style="margin-top: 12%;">
         <div class="card-body">
-            <h1 class="card-title">Listado # {{$listing->id}} - {{$listing->date}}</h1>
-
-            <form class="inline-form" action="">
-                <div class="row">
-                    <div class="form-group col-8">
-                        <input class="form-control" placeholder="Buscar" type="text" name="search" id="search_bar">
-                    </div>
-                    
-                    <div class="form-group col-4">
-                        <select class="form-control" name="search_opc" id="">
-                            <option value="none" disabled selected>Opciones de búsqueda</option>
-                            <option value="diseases">Enfermedades</option>
-                            <option value="medicines">Medicamentos</option>
-                            <option value="users">Usuarios</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-
 
             @if (\Session::has('notification'))
                 @include('layouts.templates.notification', [
@@ -41,8 +23,11 @@
                 ])
             @endif
 
-            <div id="example-table"></div>
+            <h1 class="card-title">Listado # {{$listing->id}} - {{$listing->date}}</h1>
 
+            <div id="example_div">
+            </div>
+            
         </div>
     </div>
 </div>
@@ -50,6 +35,7 @@
 @endsection
 
 @push('js')
+<script src="/js/app.js"></script>
 <script type="text/javascript" src="/tabulator/js/tabulator.js"></script>
 <script type="text/javascript">
     let sidebar_link = document.getElementById('listing-link');

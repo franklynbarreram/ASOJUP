@@ -114,7 +114,35 @@ class ListingController extends Controller
 
     public function search (Request $request) {
         try {
-            return InscribedUser::ByDisease();
+            $users = InscribedUser::select(
+                'inscribed_users.id',
+                'inscribed_users.name', 'inscribed_users.surname', 'inscribed_users.identification',
+                'inscribed_users.cicpc_id', 'inscribed_users.phone', 'inscribed_users.email',
+                'needs.id as disease_id', 'needs.name as disease_name'
+            )->with([
+                'medicines' => function ($query) {
+                    $query->selectRaw(
+                        "medicines.id, medicines.name, " .
+                        "CONCAT(medicines.concentration, medicines_units.short_name) as spec, " .
+                        "medicines_forms.name as pres"
+                    )->join(
+                        'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
+                    )->join(
+                        'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
+                    );
+                }
+            ])->join(
+                'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
+            )->join(
+                'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
+            )->where(
+                'needs.need_type_id', 1
+            )->where(
+                'needs.name', 'like', '%' . $request->disease . '%'
+            )->get();
+
+            return $users;
+
         } catch (\Exception $e) {
             return response()->json([
                 'status'    =>  'failed',

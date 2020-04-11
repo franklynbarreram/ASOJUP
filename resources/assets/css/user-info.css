@@ -1,0 +1,24 @@
+.user-row {
+    border: 1.5px solid #b3b3b3;
+    border-radius: 5px;
+    padding: 12px 5px;
+    margin-bottom: 12px;
+}
+
+.medicines-row:not(:last-child) {
+    padding-bottom: 10px;
+}
+
+.spaced {
+    padding-bottom: 12px;
+}
+
+.linkable {
+    color: rgba(65, 76, 236, 0.904);
+    cursor: pointer;
+}
+
+.ReactCollapse--content {
+    padding-top: 12px;
+    border-top: 1.5px solid #b3b3b3;
+}

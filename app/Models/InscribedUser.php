@@ -156,32 +156,4 @@ class InscribedUser extends Model
 
         return isset($result) ? $result : null;
     }
-
-    /**Listing search scopes */
-    public function scopeByDisease ($query) {
-        return $query->selectRaw(
-            "inscribed_users.identification, inscribed_users.cicpc_id," .
-            "CONCAT(inscribed_users.name, CONCAT(' ', inscribed_users.surname)) as fullname, " .
-            "12 as age, " .
-            "medicines.name as medicine_name, " .
-            "CONCAT(medicines_forms.name, CONCAT(' ', CONCAT(medicines.concentration, medicines_units.short_name))) as medicine_presentation," .
-            "1 as medicine_quantity"
-        )->join(
-            'inscribed_users_medicines', 'inscribed_users.id', '=', 'inscribed_users_medicines.inscribed_user_id'
-        )->join(
-            'medicines', 'inscribed_users_medicines.medicine_id', '=', 'medicines.id'
-        )->join(
-            'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
-        )->join(
-            'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
-        )->join(
-            ''
-        )->get();
-        
-        /*
-            ->join(
-            'medicines', 'inscribed_users_medicines.medicine_id', '=', 'medicines.id'
-        )
-        */
-    }
 }
