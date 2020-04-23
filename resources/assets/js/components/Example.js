@@ -5,4 +5,6 @@ import Bar from './Bar';
 
 const example_div = document.getElementById('example_div');
 
-ReactDOM.render(<Bar />, example_div);
+const props = Object.assign({}, example_div.dataset)
+
+ReactDOM.render(<Bar {...props}/>, example_div);

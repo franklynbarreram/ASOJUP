@@ -68,6 +68,10 @@ Route::group(['middleware' => 'auth'], function () {
 	//Listing
 	Route::get('listings/history/{id}', 'ListingController@history')->name('listings.history');
 	Route::get('listings/search', 'ListingController@search')->name('listings.search');
+	Route::get('listings/current/{id}', 'ListingController@currentItems')->name('listings.current');
+	Route::post('listings/pickItem', 'ListingController@pickItem')->name('listings.pick');
+	Route::put('listings/updateAmount', 'ListingController@updateAmount')->name('listings.updateAmount');
+	Route::delete('listings/deleteItem', 'ListingController@deleteItem')->name('listings.deleteItem');
 	Route::resource('listings', 'ListingController');
 });
 

@@ -5,6 +5,8 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
+ // Importing kendo react styles
+
 import './bootstrap';
 
 /**

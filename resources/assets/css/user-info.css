@@ -18,6 +18,11 @@
     cursor: pointer;
 }
 
+.added {
+    color: #f006cc;
+    cursor: not-allowed;
+}
+
 .ReactCollapse--content {
     padding-top: 12px;
     border-top: 1.5px solid #b3b3b3;

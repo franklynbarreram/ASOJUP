@@ -11,12 +11,14 @@ class UserTable extends Component {
 
     render () {
         return (
-            <div>
-                <h3>Usuarios Encontrados:</h3>
-    
+            <div>    
                 {
                     this.props.users.map( user => 
-                        <UserInfo key={user.id} user={user} />
+                        <UserInfo 
+                            key={user.id} 
+                            user={user}
+                            selectDataFunction={this.props.selectDataFunction}
+                        />
                     )
                 }
             </div>

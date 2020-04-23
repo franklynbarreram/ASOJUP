@@ -4,6 +4,9 @@ import { Collapse } from 'react-collapse';
 //Custom CSS
 import '../../css/user-info.css';
 
+//Custom Components
+import MedicineInfo from './MedicineInfo';
+
 class UserInfo extends Component {
 
     constructor(props) {
@@ -21,6 +24,7 @@ class UserInfo extends Component {
     }
 
     render () {
+        
         return (
             <div className="user-row">
                 <div className={"row text-center" + (this.state.isOpened == true ? ' spaced' : '')}>
@@ -30,27 +34,19 @@ class UserInfo extends Component {
                     <div className="col">{this.props.user.phone}</div>
 
                     <div className="col">
-                        <span className="linkable" onClick={this.handleIsOpened} href="#">Ver Medicamentos</span>
+                        <span className="linkable" onClick={this.handleIsOpened}>Ver Medicamentos</span>
                     </div>
                 </div>
 
                 <Collapse isOpened={this.state.isOpened} className="collapse">
                     {
-                        this.props.user.medicines.map( medicine => 
-                            <div key={medicine.id} className="row medicines-row text-center">
-                                <div className="col">
-                                    {medicine.name}
-                                </div>
-                                <div className="col">
-                                    {medicine.pres}
-                                </div>
-                                <div className="col">
-                                    {medicine.spec}
-                                </div>
-                                <div className="col">
-                                    Agregar al listado
-                                </div>
-                            </div>
+                        this.props.user.medicines.map( (medicine, index) => 
+                            <MedicineInfo
+                                key={index}
+                                user={this.props.user}
+                                medicine={medicine}
+                                selectDataFunction={this.props.selectDataFunction}
+                            />
                         )
                     }
                 </Collapse>
