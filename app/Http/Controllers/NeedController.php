@@ -165,10 +165,8 @@ class NeedController extends Controller
      */
     public function delete(Request $request)
     {
-        
         $deletedRows = Need::where('id',$request->id)->delete(); 
        
-
         return redirect()->route(
             'needs.index', ['type' => $request->type]
         )->with(

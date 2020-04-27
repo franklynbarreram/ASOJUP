@@ -14,13 +14,13 @@
             ])
 
             @if (\Session::has('notification'))
-            @include('layouts.templates.notification', [
-            'success' => \Session::get('success'),
-            'message' => \Session::get('notification'),
-            'alert_class' => \Session::get('success') == true ?
-            'alert alert-success alert-dismissible fade show' :
-            'alert alert-danger alert-dismissible fade show'
-            ])
+                @include('layouts.templates.notification', [
+                'success' => \Session::get('success'),
+                'message' => \Session::get('notification'),
+                'alert_class' => \Session::get('success') == true ?
+                'alert alert-success alert-dismissible fade show' :
+                'alert alert-danger alert-dismissible fade show'
+                ])
             @endif
 
             <div class="table-responsive">

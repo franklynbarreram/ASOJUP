@@ -38,38 +38,72 @@
                 </li>
 
                 <!-- Collapse -->
-                <li class="nav-item">
-                <!-- Opciones para inscritos -->
-                <a class="nav-link collapsed" href="#listing-options" id="listing-link"
-                    data-toggle="collapse"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="listing-options"
-                >
-                    <i class="fas fa-clipboard-list"></i>
-                    <span class="nav-link-text">{{ __('Listados') }}</span>
-                </a>
+                @if(Auth::user()->role_id == 1)
+                    <li class="nav-item">
+                        <!-- Opciones para delegados -->
+                        <a class="nav-link collapsed" href="#delegates-options" id="delegates-link"
+                            data-toggle="collapse"
+                            role="button"
+                            aria-expanded="false"
+                            aria-controls="delegates-options"
+                        >
+                            <i class="fas fa-user-shield"></i>
+                            <span class="nav-link-text">{{ __('Delegados') }}</span>
+                        </a>
 
-                <div class="collapse" id="listing-options">
-                    <ul class="nav nav-sm flex-column">
-                        <!-- Nuevo Inscrito -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('listings.create') }}">
-                                <i class="fas fa-plus"></i>
-                                {{ __('Nuevo') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('listings.index') }}">
-                                <i class="fas fa-list-alt"></i>
-                                {{ __('Ver Todos') }}
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                        <div class="collapse" id="delegates-options">
+                            <ul class="nav nav-sm flex-column">
+                                <!-- Nuevo Inscrito -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">
+                                        <i class="fas fa-plus"></i>
+                                        {{ __('Nuevo') }}
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('delegates.index') }}">
+                                        <i class="fas fa-list-alt"></i>
+                                        {{ __('Ver Todos') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
+                <!-- Collapse -->
+                <li class="nav-item">
+                    <!-- Opciones para inscritos -->
+                    <a class="nav-link collapsed" href="#listing-options" id="listing-link"
+                        data-toggle="collapse"
+                        role="button"
+                        aria-expanded="false"
+                        aria-controls="listing-options"
+                    >
+                        <i class="fas fa-clipboard-list"></i>
+                        <span class="nav-link-text">{{ __('Listados') }}</span>
+                    </a>
+
+                    <div class="collapse" id="listing-options">
+                        <ul class="nav nav-sm flex-column">
+                            <!-- Nuevo Inscrito -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('listings.create') }}">
+                                    <i class="fas fa-plus"></i>
+                                    {{ __('Nuevo') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('listings.index') }}">
+                                    <i class="fas fa-list-alt"></i>
+                                    {{ __('Ver Todos') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 <!-- Fin funciones para inscritos -->
-            </li>
-            <!-- End of Collapse -->
+                </li>
+                <!-- End of Collapse -->
 
                 <!-- Collapse Inscritos-->
                 <li class="nav-item">
@@ -164,6 +198,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('needs.index', ['type' => 2])}}">
                         <i class="fas fa-hands-helping text-info"></i> {{ __('Beneficios') }}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('permissions.index')}}">
+                        <i class="fas fa-exclamation-circle text-yellow"></i> {{ __('Permisos') }}
                     </a>
                 </li>
             </ul>

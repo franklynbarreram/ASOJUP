@@ -9,6 +9,16 @@
     <div class="container mt--8 pb-5">
         <!-- Table -->
         <div class="row justify-content-center">
+            @if (\Session::has('notification'))
+                @include('layouts.templates.notification', [
+                'success' => \Session::get('success'),
+                'message' => \Session::get('notification'),
+                'alert_class' => \Session::get('success') == true ?
+                'alert alert-success alert-dismissible fade show' :
+                'alert alert-danger alert-dismissible fade show'
+                ])
+            @endif
+
             <div class="col-lg-6 col-md-8">
                 <div class="card bg-secondary shadow border-0">
                     <div class="card-body px-lg-5 py-lg-5">

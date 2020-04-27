@@ -18,6 +18,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
+Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
+Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
+
+
 Route::group(['middleware' => 'auth'], function () {
 
 	//Custom logout
@@ -34,10 +40,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 
 	//Edit inscribedUsers
-	Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
-	Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
-	Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
-	
 	Route::put('inscribedUsers/inhabilitate/{id}', 'InscribedUsersController@ajaxInhabilitate');
 	Route::resource('inscribedUsers', 'InscribedUsersController');
 
@@ -73,5 +75,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('listings/updateAmount', 'ListingController@updateAmount')->name('listings.updateAmount');
 	Route::delete('listings/deleteItem', 'ListingController@deleteItem')->name('listings.deleteItem');
 	Route::resource('listings', 'ListingController');
+
+	Route::resource('delegates', 'DelegateController');
+	Route::resource('permissions', 'PermissionController');
 });
 
