@@ -36,7 +36,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        //
+        return view ('admin.permissions.create');
     }
 
     /**
@@ -47,7 +47,19 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $permission = Permission::create([
+            'description'   =>  $request->description,
+            'status'        =>  'Pendiente',
+            'user_id'       =>  Auth::user()->id
+        ]);
+
+        return redirect()->route(
+            'permissions.index'
+        )->with(
+            'notification', 'Se ha solicitado el permiso satisfactoriamente'
+        )->with(
+            'success', true
+        );  
     }
 
     /**
@@ -81,7 +93,19 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $permission = Permission::find($id);
+
+        $permission->status = $request->status;
+
+        $permission->save();
+
+        return redirect()->route(
+            'permissions.index'
+        )->with(
+            'notification', 'Se ha actualizado el permiso satisfactoriamente'
+        )->with(
+            'success', true
+        );
     }
 
     /**
@@ -92,6 +116,17 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $permission = Permission::find($id);
+
+        $permission->status = 'Cancelado';
+        $permission->save();
+
+        return redirect()->route(
+            'permissions.index'
+        )->with(
+            'notification', 'Se ha cancelado el permiso satisfactoriamente'
+        )->with(
+            'success', true
+        );
     }
 }

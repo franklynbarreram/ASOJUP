@@ -52,7 +52,7 @@
                                     <form action="{{route('delegates.destroy', $d->id)}}" method="POST">
                                         {{ csrf_field() }}
                                         {{method_field('DELETE')}}
-                                        
+
                                         <button type="submit" id="btn-delete">
                                             <i class="fas fa-trash text-red"></i>
                                         </button>
@@ -71,13 +71,11 @@
 
 @push('js')
 <script type="text/javascript">
-
     let sidebar_link = document.getElementById('delegates-link');
     sidebar_link.classList.remove('collapsed');
     sidebar_link.setAttribute('aria-expanded', true);
 
     let sidebar_options = document.getElementById('delegates-options');
     sidebar_options.classList.add('show');
-
 </script>
 @endpush
