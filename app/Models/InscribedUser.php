@@ -12,6 +12,7 @@ class InscribedUser extends Authenticatable
     protected $fillable = [
         'name',
         'surname',
+        'password',
         'email',
         'identification',
         'cicpc_id',

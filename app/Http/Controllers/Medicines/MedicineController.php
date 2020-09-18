@@ -136,7 +136,7 @@ class MedicineController extends Controller
 
         $medicine->update($request->except(['_token', '_method']));
 
-        return redirect()->route('forms.index')->with(
+        return redirect()->route('medicines.index')->with(
             'notification', 'Se ha editado la medicina exitosamente.'
         )->with(
             'success', true

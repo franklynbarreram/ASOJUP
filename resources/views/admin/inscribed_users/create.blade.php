@@ -17,42 +17,42 @@
                     <div class="row">
                         <div class="form-group col-6">
                             <label for="name" class="form-control-label">Nombre</label>
-                            <input class="form-control" name="name" type="text" placeholder="Ingresa el nombre" id="name">
+                            <input class="form-control" name="name" type="text" placeholder="Ingresa el nombre" id="name" required>
                         </div>
     
                         <div class="form-group col-6">
                             <label for="surname" class="form-control-label">Apellido</label>
-                            <input class="form-control" name="surname" type="text" placeholder="Ingresa el apellido" id="surname">
+                            <input class="form-control" name="surname" type="text" placeholder="Ingresa el apellido" id="surname" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-6">
                             <label for="email" class="form-control-label">Email</label>
-                            <input class="form-control" name="email" type="email" placeholder="name@example.com" id="email">
+                            <input class="form-control" name="email" type="email" placeholder="name@example.com" id="email" required>
                         </div>
 
                         <div class="form-group col-6">
                             <label for="phone" class="form-control-label">Teléfono</label>
-                            <input class="form-control" name="phone" type="text" placeholder="0424 - 6554482" id="phone">
+                            <input class="form-control" name="phone" type="text" placeholder="0424 - 6554482" id="phone" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-6">
                             <label for="identification" class="form-control-label">Cédula</label>
-                            <input class="form-control" name="identification" type="text" placeholder="123456789" id="identification">
+                            <input class="form-control" name="identification" type="text" placeholder="123456789" id="identification" required>
                         </div>
                         
                         <div class="form-group col-6">
                             <label for="cicpc_id" class="form-control-label">Identificación CICPC</label>
-                            <input class="form-control" name="cicpc_id" type="text" placeholder="123456789" id="cicpc_id">
+                            <input class="form-control" name="cicpc_id" type="text" placeholder="123456789" id="cicpc_id" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="address" class="form-control-label">Dirección</label>
-                        <input class="form-control" name="address" type="text" placeholder="Calle #2 Carrera #3 C-07" id="address">
+                        <input class="form-control" name="address" type="text" placeholder="Calle #2 Carrera #3 C-07" id="address" required>
                     </div>
                     
 
@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="form-group col-4">
                             <label for="diseases[]">Enfermedades</label>
-                            <select class="form-control" name="diseases[]" id="diseases-sel" multiple="multiple">
+                            <select class="form-control" name="diseases[]" id="diseases-sel" multiple="multiple" required>
                                 @foreach($diseases as $d)
                                     <option value="{{$d->id}}">{{$d->name}}</option>
                                 @endforeach
@@ -75,7 +75,7 @@
 
                         <div class="form-group col-4">
                             <label for="benefits[]">Solicitudes Especiales</label>
-                            <select class="form-control" name="benefits[]" id="benefits-sel" multiple="multiple">
+                            <select class="form-control" name="benefits[]" id="benefits-sel" multiple="multiple" required>
                                 @foreach($benefits as $d)
                                     <option value="{{$d->id}}">{{$d->name}}</option>
                                 @endforeach
@@ -88,7 +88,7 @@
 
                         <div class="form-group col-4">
                             <label for="medicines[]">Medicinas</label>
-                            <select class="form-control" name="medicines[]" id="medicines-sel" multiple="multiple">
+                            <select class="form-control" name="medicines[]" id="medicines-sel" multiple="multiple" required>
                                 @foreach($medicines as $d)
                                     <option value="{{$d->id}}">{{$d->fullName}}</option>
                                 @endforeach

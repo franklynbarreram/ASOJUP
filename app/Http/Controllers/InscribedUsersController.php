@@ -64,16 +64,23 @@ class InscribedUsersController extends Controller
      */
     public function store (Request $request)
     {
-        $inscribed = InscribedUser::create([
-            'name'      =>  $request->name,
-            'surname'   =>  $request->surname,
-            'email'     =>  $request->email,
-            'phone'     =>  $request->phone,
-            'identification'    =>  $request->identification,
-            'cicpc_id'          =>  $request->cicpc_id,
-            'active'            =>  true,
-            'address'           =>  $request->address
-        ]);
+        try {
+            $password="";
+            $inscribed = InscribedUser::create([
+                'name'      =>  $request->name,
+                'surname'   =>  $request->surname,
+                'email'     =>  $request->email,
+                'phone'     =>  $request->phone,
+                'identification'    =>  $request->identification,
+                'cicpc_id'          =>  $request->cicpc_id,
+                'active'            =>  true,
+                'address'           =>  $request->address,
+                'password'=>$password
+            ]);
+        } catch (\Exception $e) {
+            return $e;
+        }
+        
         
         //Medicines
         if (isset($request->medicines)) {
