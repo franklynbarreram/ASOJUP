@@ -78,6 +78,14 @@ class ListingController extends Controller
     public function edit($id)
     {
         //
+         $listing = Listing::find(1);
+        $listings = Listing::orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.listings.edit', [
+            'listing'  =>  $listing
+        ]);
+      
+       /*  return view('admin.listings.edit', ['listing' =>  $listing]);  */
     }
 
     /**
@@ -90,6 +98,8 @@ class ListingController extends Controller
     public function update(Request $request, $id)
     {
         //
+        return $id;
+        
     }
 
     /**

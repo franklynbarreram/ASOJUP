@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Zone;
 use App\User;
 use Validator;
+use Illuminate\Support\Facades\Hash;
 
 class DelegateController extends Controller
 {
@@ -15,6 +16,43 @@ class DelegateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function create ()
+    {
+        $zones = Zone::get();
+        try {
+            //code...
+            return view('admin.delegates.create',['zones' =>  $zones]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            echo $th;
+        }
+       
+    }
+
+    public function store(Request $request)
+    {   
+       
+         try {
+             $delegates = User::create([
+                'name'      =>  $request->name,
+                'email'      =>  $request->email,
+                'password'      =>   Hash::make($request->password),
+                'zone_id'      =>  $request->zone_id,
+                'role_id'      =>  2,
+            ]); 
+            $delegates = User::where('role_id', 2)->get();
+            return redirect()->route(
+                'delegates.index', [ 'delegates' =>  $delegates ]
+            )->with(
+                'notification', 'Se ha creado el delegado satisfactoriamente'
+            )->with(
+                'success', true
+            );
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        } 
+    }
+
     public function index (Request $request) {
 
         $delegates = User::where('role_id', 2)->get();
@@ -111,5 +149,20 @@ class DelegateController extends Controller
         )->with(
             'success', true
         );  
+    }
+
+    public function eliminar (Request $request)
+    {
+        //
+        $delegate = User::find($request["id_delegado"]);
+       
+         try{
+            $delegate->delete();
+            return back()->with('notification','El delegado fue eliminado exitosamente!')->with(
+                'success', true
+            );
+        }catch(\Exception $e){
+            return back()->with('error',$e);
+        } 
     }
 }

@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('listings', 'ListingController');
 
 	Route::resource('delegates', 'DelegateController');
+	Route::post('delegates/eliminar', 'DelegateController@eliminar');
 	Route::resource('permissions', 'PermissionController');
 });
 

@@ -10,7 +10,7 @@
             @include('layouts.templates.card-search-header', [
                 'title' => 'Listado de Delegados',
                 'search_route' => 'delegates.index',
-                'create_route' => 'register'
+                'create_route' => 'delegates.create'
             ])
 
             @if (\Session::has('notification'))
@@ -49,14 +49,15 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <form action="{{route('delegates.destroy', $d->id)}}" method="POST">
+                                  <!--   <form action="{{route('delegates.destroy', $d->id)}}" method="POST"> 
                                         {{ csrf_field() }}
-                                        {{method_field('DELETE')}}
+                                        {{method_field('DELETE')}}-->
 
-                                        <button type="submit" id="btn-delete">
+                                        <button type="submit" id="btn-delete" data-toggle="modal" data-target="#eliminarDelegado"
+                                        data-id="{{$d->id}}">
                                             <i class="fas fa-trash text-red"></i>
                                         </button>
-                                    </form>
+                                  <!--   </form> -->
                                 </td>
                             </tr>
                             @endforeach
@@ -64,6 +65,42 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="eliminarDelegado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Eliminar Delegado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formEliminarDelegado" action="{{url('delegates/eliminar')}}" method="POST" >
+                {{ csrf_field() }}
+                   
+                    
+
+                   
+                    <div class="form-row">
+                        
+                        <p>¿Desea eliminar el delegado?</p>
+                      
+                        <input type="hidden" name="id_delegado" id="id_destroy_delegado">
+                    </div>
+
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" id="" class="btn btn-primary"  >Eliminar delegado</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
@@ -77,5 +114,15 @@
 
     let sidebar_options = document.getElementById('delegates-options');
     sidebar_options.classList.add('show');
+
+
+     $('#eliminarDelegado').on('show.bs.modal',function(event){
+        
+        var button = $(event.relatedTarget);
+        var id = button.data('id');
+
+        var modal = $(this);
+        modal.find('#id_destroy_delegado').val(id);
+     });            
 </script>
 @endpush

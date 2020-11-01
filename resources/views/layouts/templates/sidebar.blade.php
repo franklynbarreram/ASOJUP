@@ -55,7 +55,7 @@
                             <ul class="nav nav-sm flex-column">
                                 <!-- Nuevo Inscrito -->
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">
+                                    <a class="nav-link" href="{{ route('delegates.create') }}">
                                         <i class="fas fa-plus"></i>
                                         {{ __('Nuevo') }}
                                     </a>
