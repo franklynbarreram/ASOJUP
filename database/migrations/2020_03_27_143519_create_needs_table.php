@@ -17,12 +17,10 @@ class CreateNeedsTable extends Migration
             Schema::create('needs', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('name');
-                $table->string('description');
-
+                $table->text('description')->nullable();
+                $table->timestamps();
                 $table->unsignedInteger('need_type_id');
                 $table->foreign('need_type_id')->references('id')->on('needs_types')->onDelete('cascade');
-
-                $table->timestamps();
             });
         }
     }

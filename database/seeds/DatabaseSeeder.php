@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\InscribedUser;
+use App\Models\InscribedUserMedicine;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,12 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([RoleSeeder::class]);
-        $this->call([ZoneSeeder::class]);
-        $this->call([NeedTypeSeeder::class]);
-        $this->call([MedicineFormSeeder::class]);
-        $this->call([MedicineUnitSeeder::class]);
-        $this->call([UsersTableSeeder::class]);
-        $this->call([InscritosSeeder::class]);
+        $classes = [
+            RoleSeeder::class,
+            ZoneSeeder::class,
+            NeedTypeSeeder::class,
+            NeedSeeder::class,
+            MedicineFormSeeder::class,
+            MedicineUnitSeeder::class,
+            MedicineSeeder::class,
+            UsersTableSeeder::class,
+            InscribedUserSeeder::class,
+            InscribedUserMedicineSeeder::class,
+            InscribedUserNeedSeeder::class,
+        ];
+
+        foreach ($classes as $class) {
+            $this->call($class);
+        }
     }
 }
