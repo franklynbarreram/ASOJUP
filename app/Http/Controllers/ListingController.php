@@ -97,9 +97,7 @@ class ListingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         return $id;
-        
     }
 
     /**
@@ -132,7 +130,8 @@ class ListingController extends Controller
      *   {title:"Cantidad", field:"medicine_quantity"},
      *   {title:"Medicine User Id", field:"user_medicine_id"}
     */
-    public function currentItems ($listing_id) {
+    public function currentItems($listing_id)
+    {
         try {
             $items = ListingHistory::selectRaw(
                 "
@@ -175,18 +174,23 @@ class ListingController extends Controller
         }
     }
 
-    public function search (Request $request) {
+    public function search(Request $request)
+    {
         try {
-
             $users = InscribedUser::select(
                 'inscribed_users.id',
-                'inscribed_users.name', 'inscribed_users.surname', 'inscribed_users.identification',
-                'inscribed_users.cicpc_id', 'inscribed_users.phone', 'inscribed_users.email',
-                'needs.id as disease_id', 'needs.name as disease_name'
+                'inscribed_users.name',
+                'inscribed_users.surname',
+                'inscribed_users.identification',
+                'inscribed_users.cicpc_id',
+                'inscribed_users.phone',
+                'inscribed_users.email',
+                'needs.id as disease_id',
+                'needs.name as disease_name'
             )->with([
+                // Watch the "inscribed_user_need" column item, might change for an polymorphic column
                 'medicines' => function ($query) use ($request) {
-                    $query->selectRaw(
-                        "
+                    $query->selectRaw("
                         medicines.id,
                         medicines.name,
                         CONCAT(medicines.concentration, medicines_units.short_name) as spec,
@@ -194,14 +198,15 @@ class ListingController extends Controller
                         medicines_forms.name as pres,
                         (
                             IF(
-                               (SELECT inscribed_user_medicine_id
+                                (
+                                SELECT inscribed_user_need
                                 FROM listings_history 
-                                WHERE inscribed_users_medicines.id = inscribed_user_medicine_id 
-                                AND listing_id = $request->listingId) > 0
+                                WHERE inscribed_users_medicines.id = inscribed_user_need 
+                                AND listing_id = $request->listingId
+                            ) > 0
                             , true, false)
                         ) AS selected
-                        " 
-                    )->join(
+                    ")->join(
                         'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
                     )->join(
                         'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
@@ -226,7 +231,8 @@ class ListingController extends Controller
         }
     }
 
-    public function pickItem (Request $request) {
+    public function pickItem(Request $request)
+    {
         try {
 
             $listing_item = ListingHistory::where(
