@@ -1,9 +1,10 @@
 @extends('layouts.app')
-    <!-- <link rel="stylesheet" href="/tabulator/css/tabulator.css"> -->
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
- @section('custom-css')
 
+@section('custom-css')
+<!-- <link rel="stylesheet" href="/tabulator/css/tabulator.css"> -->
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+<link type="text/css" rel="stylesheet" href="/css/modified-modal.css" />
 @endsection
 
 @section('content')
@@ -13,7 +14,6 @@
 <div class="container-fluid mt--7">
     <div class="card" style="margin-top: 12%;">
         <div class="card-body">
-
             @if (\Session::has('notification'))
                 @include('layouts.templates.notification', [
                     'success' => \Session::get('success'),
@@ -42,8 +42,10 @@
                     </select>
                 </div>
                 <div class="form-group col-10">
-                    <input class="form-control" type="password" name="password_confirmation" id="passowrd_confirm">
+                    <input class="form-control" type="search" name="search" id="search">
                 </div>
+
+                @include('layouts.templates.forms.add-listing-users', [])
             </div>
             <button id="test-btn" class="btn btn-default mb-3">Add new customer</button>
             <div id="jsGrid"></div>

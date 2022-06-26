@@ -18,7 +18,6 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
 Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
 Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
@@ -74,6 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('listings/pickItem', 'ListingController@pickItem')->name('listings.pick');
 	Route::put('listings/updateAmount', 'ListingController@updateAmount')->name('listings.updateAmount');
 	Route::delete('listings/deleteItem', 'ListingController@deleteItem')->name('listings.deleteItem');
+	Route::get('listings/users/table', 'ListingController@getInscribedTable')->name('listings.test');
 	Route::resource('listings', 'ListingController');
 
 	Route::resource('delegates', 'DelegateController');

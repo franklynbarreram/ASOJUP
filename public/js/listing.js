@@ -26,14 +26,10 @@ let countries = [
 $("#jsGrid").jsGrid({
   width: "100%",
   height: "400px",
-
-  // inserting: true,
   editing: true,
   sorting: true,
   paging: true,
-
   data: clients,
-
   fields: [
     { name: "Name", type: "text", width: 150, validate: "required" },
     { name: "Age", type: "number", width: 50 },
@@ -65,3 +61,28 @@ document.getElementById("test-btn").onclick = () => {
 };
 
 console.log({ clients });
+
+document.getElementById("search").addEventListener("keypress", (e) => {
+  if (e.key !== "Enter") {
+    return;
+  }
+
+  $.ajax({
+    // headers: { "X-CSRF-TOKEN": token },
+    type: "GET",
+    // url: "http://localhost:8000/api/listings/search", // TODO: change base url with an env var
+    url: "http://localhost:8000/listings/users/table",
+    data: {
+      listingId: 1,
+    },
+    success: (response) => {
+      console.log({ response });
+      $("#users-list").html(response);
+      $("#listing-users-form").modal("show");
+    },
+    error: (XMLHttpRequest, textStatus, errorThrown) => {
+      console.log(XMLHttpRequest);
+      console.error({ textStatus, errorThrown });
+    },
+  });
+});

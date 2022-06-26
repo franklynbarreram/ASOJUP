@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class InscribedUser extends Authenticatable
@@ -24,7 +23,6 @@ class InscribedUser extends Authenticatable
     protected $hidden = [
         'created_at', 'updated_at'
     ];
-
 
     /**-------- Relations ------ */
     public function medicines () {

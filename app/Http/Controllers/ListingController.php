@@ -111,8 +111,8 @@ class ListingController extends Controller
         //
     }
 
-    public function history ($listing_id) {
-        
+    public function history ($listing_id)
+    {
         $listing = Listing::find($listing_id);
         
         return view('admin.listings.history', [
@@ -271,7 +271,8 @@ class ListingController extends Controller
         } 
     }
 
-    public function updateAmount (Request $request) {
+    public function updateAmount (Request $request)
+    {
         try {
 
             $listing_item = ListingHistory::where([
@@ -295,7 +296,8 @@ class ListingController extends Controller
         }
     }
 
-    public function deleteItem (Request $request) {
+    public function deleteItem (Request $request)
+    {
         try {
 
             $listing_item = ListingHistory::where([
@@ -316,5 +318,14 @@ class ListingController extends Controller
                 'message'   =>  $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getInscribedTable(Request $request)
+    {
+        $users = $this->search($request);
+
+        return view('layouts.templates.inscribed-users-table', [
+            'users' => $users
+        ])->render();
     }
 }

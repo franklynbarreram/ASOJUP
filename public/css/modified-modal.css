@@ -1,0 +1,8 @@
+.modified-modal {
+  max-width: 1024px !important;
+}
+
+.users-list {
+  max-height: 520px;
+  overflow-y: auto;
+}
