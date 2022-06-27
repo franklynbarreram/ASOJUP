@@ -67,13 +67,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('needs', 'NeedController');
 
 	//Listing
-	Route::get('listings/history/{id}', 'ListingController@history')->name('listings.history');
+	Route::get('listings/history/{listingId}', 'ListingController@history')->name('listings.history');
 	Route::get('listings/search', 'ListingController@search')->name('listings.search');
 	Route::get('listings/current/{id}', 'ListingController@currentItems')->name('listings.current');
-	Route::post('listings/pickItem', 'ListingController@pickItem')->name('listings.pick');
-	Route::put('listings/updateAmount', 'ListingController@updateAmount')->name('listings.updateAmount');
 	Route::delete('listings/deleteItem', 'ListingController@deleteItem')->name('listings.deleteItem');
 	Route::get('listings/users/table', 'ListingController@getInscribedTable')->name('listings.test');
+	Route::post('listings/save-current-users', 'ListingController@addInscribedUsersToListing')->name('listings.saveCurrentUsers');
 	Route::resource('listings', 'ListingController');
 
 	Route::resource('delegates', 'DelegateController');

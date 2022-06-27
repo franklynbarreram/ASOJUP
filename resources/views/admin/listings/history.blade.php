@@ -8,9 +8,7 @@
 @endsection
 
 @section('content')
-
 @include('layouts.templates.topbar')
-
 <div class="container-fluid mt--7">
     <div class="card" style="margin-top: 12%;">
         <div class="card-body">
@@ -47,7 +45,6 @@
 
                 @include('layouts.templates.forms.add-listing-users', [])
             </div>
-            <button id="test-btn" class="btn btn-default mb-3">Add new customer</button>
             <div id="jsGrid"></div>
         </div>
     </div>
@@ -61,11 +58,26 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 <script type="text/javascript" src="/js/listing.js"></script>
 <script type="text/javascript">
-    let sidebar_link = document.getElementById('listing-link');
-    sidebar_link.classList.remove('collapsed');
-    sidebar_link.setAttribute('aria-expanded', true);
+    const inscribedUsers = {!! json_encode($inscribedUsers) !!}
 
-    let sidebar_options = document.getElementById('listing-options');
-    sidebar_options.classList.add('show');
+    // console.log({ inscribedUsers })
+
+    $("#jsGrid").jsGrid({
+        width: "100%",
+        height: "400px",
+        editing: true,
+        sorting: true,
+        paging: true,
+        data: inscribedUsers,
+        fields: [
+            { name: "name", type: "text" },
+            { name: "surname", type: "text" },
+            { name: "cicpc_id", type: "text" },
+            { name: "disease_name", type: "text" },
+            { name: "email", type: "text" },
+            { name: "identification", type: "text" },
+            { type: "control" },
+        ],
+    });
 </script>
 @endpush

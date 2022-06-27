@@ -7,17 +7,7 @@
             <h1 class="text-center">Inscritos que podrian ser relacionados</h1>
           </div>
           <div class="card-body">
-            <form id="cust-form" role="form">
-              {{ csrf_field() }}
-
-              <div id="users-list" class="users-list"></div>
-
-              <div class="text-center">
-                <button id="btn-submit-inscribed-users" type="button" class="btn btn-success my-4">
-                  Agregar usuarios
-                </button>
-              </div>
-            </form>
+            <div id="users-list" class="users-list"></div>
           </div>
         </div>
       </div>

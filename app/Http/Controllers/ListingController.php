@@ -111,12 +111,20 @@ class ListingController extends Controller
         //
     }
 
-    public function history ($listing_id)
+    public function history(Request $request)
     {
-        $listing = Listing::find($listing_id);
+        $listing = Listing::find($request->listingId);
+
+        $inscribedUsers = [];
+
+        if ($request->inscribedIds) {
+            $userIds = explode(',', $request->inscribedIds[0]);
+            $inscribedUsers = $this->retrieveUsers($listing->id, NULL, $userIds);
+        }
         
         return view('admin.listings.history', [
-            'listing'   =>  $listing
+            'listing' => $listing,
+            'inscribedUsers' => $inscribedUsers,
         ]);
     }
 
@@ -177,117 +185,10 @@ class ListingController extends Controller
     public function search(Request $request)
     {
         try {
-            $users = InscribedUser::select(
-                'inscribed_users.id',
-                'inscribed_users.name',
-                'inscribed_users.surname',
-                'inscribed_users.identification',
-                'inscribed_users.cicpc_id',
-                'inscribed_users.phone',
-                'inscribed_users.email',
-                'needs.id as disease_id',
-                'needs.name as disease_name'
-            )->with([
-                // Watch the "inscribed_user_need" column item, might change for an polymorphic column
-                'medicines' => function ($query) use ($request) {
-                    $query->selectRaw("
-                        medicines.id,
-                        medicines.name,
-                        CONCAT(medicines.concentration, medicines_units.short_name) as spec,
-                        inscribed_users_medicines.id as user_medicine_id,
-                        medicines_forms.name as pres,
-                        (
-                            IF(
-                                (
-                                SELECT inscribed_user_need
-                                FROM listings_history 
-                                WHERE inscribed_users_medicines.id = inscribed_user_need 
-                                AND listing_id = $request->listingId
-                            ) > 0
-                            , true, false)
-                        ) AS selected
-                    ")->join(
-                        'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
-                    )->join(
-                        'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
-                    );
-                }
-            ])->join(
-                'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
-            )->join(
-                'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
-            )->where(
-                'needs.need_type_id', 1
-            )->where(
-                'needs.name', 'like', '%' . $request->disease . '%'
-            )->get();
-
-            return $users;
-        } catch (\Exception $e) {
-            return response()->json([
-                'status'    =>  'failed',
-                'message'   =>  $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function pickItem(Request $request)
-    {
-        try {
-
-            $listing_item = ListingHistory::where(
-                'listing_id', $request->listing_id
-            )->where(
-                'inscribed_user_medicine_id', $request->inscribed_user_medicine_id
-            )->first();
-
-            if ($listing_item) {
-                $listing_item->delete();
-
-                return response()->json([
-                    'status'    =>  'success',
-                    'message'   =>  'Item has been succesfully deleted',
-                    'deleted'   =>  true
-                ], 200);
-            }
-
-            $listing_item = ListingHistory::create([
-                'listing_id'                    =>  $request->listing_id,
-                'inscribed_user_medicine_id'    =>  $request->inscribed_user_medicine_id,
-                'amount'    => 1
-            ]);
-
-            return response()->json([
-                'status'    =>  'success',
-                'message'   =>  'Item has been succesfully added',
-                'deleted'   =>  false
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'status'    =>  'failed',
-                'message'   =>  $e->getMessage()
-            ], 500);
-        } 
-    }
-
-    public function updateAmount (Request $request)
-    {
-        try {
-
-            $listing_item = ListingHistory::where([
-                'listing_id'                    =>  $request->listing_id,
-                'inscribed_user_medicine_id'    =>  $request->inscribed_user_medicine_id
-            ])->first();
-
-            $listing_item->amount = $request->amount;
-            $listing_item->save();
-
-            return response()->json([
-                'status'    =>  'success',
-                'message'   =>  'item amount succesfully updated'
-            ]);
-            
+            return $this->retrieveUsers(
+                $request->listingId,
+                $request->disease
+            );
         } catch (\Exception $e) {
             return response()->json([
                 'status'    =>  'failed',
@@ -327,5 +228,75 @@ class ListingController extends Controller
         return view('layouts.templates.inscribed-users-table', [
             'users' => $users
         ])->render();
+    }
+
+    public function addInscribedUsersToListing(Request $request)
+    {
+        $request->listingId = 1;
+
+        return redirect()->route('listings.history', [
+            'listingId' => 1,
+            'userIds' => $request->inscribedIds[0]
+        ]);
+    }
+
+    private function retrieveUsers($listingId, $disease = NULL, $userIds = NULL)
+    {
+        $query = InscribedUser::select(
+            'inscribed_users.id',
+            'inscribed_users.name',
+            'inscribed_users.surname',
+            'inscribed_users.identification',
+            'inscribed_users.cicpc_id',
+            'inscribed_users.phone',
+            'inscribed_users.email',
+            'needs.id as disease_id',
+            'needs.name as disease_name'
+        )->with([
+            // Watch the "inscribed_user_need" column item, might change for an polymorphic column
+            'medicines' => function ($query) use ($listingId, $disease) {
+                $query->selectRaw("
+                    medicines.id,
+                    medicines.name,
+                    CONCAT(medicines.concentration, medicines_units.short_name) as spec,
+                    inscribed_users_medicines.id as user_medicine_id,
+                    medicines_forms.name as pres,
+                    (
+                        IF(
+                            (
+                            SELECT inscribed_user_need
+                            FROM listings_history 
+                            WHERE inscribed_users_medicines.id = inscribed_user_need 
+                            AND listing_id = $listingId
+                        ) > 0
+                        , true, false)
+                    ) AS selected
+                ")->join(
+                    'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
+                )->join(
+                    'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
+                );
+            }
+        ])->join(
+            'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
+        )->join(
+            'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
+        )->where(
+            'needs.need_type_id', 1
+        );
+
+        if ($disease) {
+            $query->where(
+                'needs.name', 'like', '%' . $disease . '%'
+            );
+        }
+
+        if ($userIds) {
+            $query->whereIn(
+                'inscribed_users.id', $userIds
+            );
+        }
+
+        return $query->get();
     }
 }
