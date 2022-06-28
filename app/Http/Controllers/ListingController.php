@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\InscribedUser;
 use App\Models\Listing;
@@ -11,6 +12,18 @@ use App\Models\ListingHistory;
 
 class ListingController extends Controller
 {
+    const CLASSNAMES = [
+        'needs' => 'App\Models\Need',
+        'medicines' => 'App\Models\Medicine',
+        'requests' => 'App\Models\Request',
+    ];
+
+    const TABLENAMES = [
+        'needs' => 'App\Models\Need',
+        'medicines' => 'App\Models\Medicine',
+        'requests' => 'App\Models\Request',
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -184,14 +197,10 @@ class ListingController extends Controller
 
     public function search(Request $request)
     {
-        $inscribed = InscribedUser::find(2);
-
-        return $inscribed->requests;
-
         try {
             return $this->retrieveUsers(
                 $request->listingId,
-                $request->disease
+                $request->type,
             );
         } catch (\Exception $e) {
             return response()->json([
@@ -201,7 +210,7 @@ class ListingController extends Controller
         }
     }
 
-    public function deleteItem (Request $request)
+    public function deleteItem(Request $request)
     {
         try {
 
@@ -244,9 +253,11 @@ class ListingController extends Controller
         ]);
     }
 
-    private function retrieveUsers($listingId, $disease = NULL, $userIds = NULL)
+    private function retrieveUsers($listingId, $type = NULL, $userIds = NULL)
     {
-        $query = InscribedUser::select(
+        $queryType = self::CLASSNAMES[$type];
+
+        $query = InscribedUser::select([
             'inscribed_users.id',
             'inscribed_users.name',
             'inscribed_users.surname',
@@ -254,36 +265,16 @@ class ListingController extends Controller
             'inscribed_users.cicpc_id',
             'inscribed_users.phone',
             'inscribed_users.email',
-            'needs.id as disease_id',
-            'needs.name as disease_name'
-        )->with([
-            // Watch the "inscribed_user_need" column item, might change for an polymorphic column
-            'medicines' => function ($query) use ($listingId, $disease) {
-                $query->selectRaw("
-                    medicines.id,
-                    medicines.name,
-                    CONCAT(medicines.concentration, medicines_units.short_name) as spec,
-                    inscribed_users_medicines.id as user_medicine_id,
-                    medicines_forms.name as pres
-                ")->join(
-                    'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
-                )->join(
-                    'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
-                );
-            }
+            'inscribed_users_relationships.entity_id',
+            'inscribed_users_relationships.entity_type',
+            "$type.name AS item_name",
         ])->join(
-            'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
+            'inscribed_users_relationships', 'inscribed_users.id', '=', 'inscribed_users_relationships.inscribed_user_id'
         )->join(
-            'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
+            $type, 'inscribed_users_relationships.entity_id', '=', "$type.id"
         )->where(
-            'needs.need_type_id', 1
+            'inscribed_users_relationships.entity_type', $queryType
         );
-
-        if ($disease) {
-            $query->where(
-                'needs.name', 'like', '%' . $disease . '%'
-            );
-        }
 
         if ($userIds) {
             $query->whereIn(

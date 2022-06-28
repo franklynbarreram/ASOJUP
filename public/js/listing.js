@@ -16,6 +16,7 @@ document.getElementById("search").addEventListener("keypress", (e) => {
     url: "http://localhost:8000/listings/users/table",
     data: {
       listingId: 1,
+      type: "medicines",
     },
     success: (response) => {
       console.log({ response });

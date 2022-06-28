@@ -16,7 +16,6 @@ class InscribedUserRelationship extends Model
 
     public $timestamps = FALSE;
 
-    
     public function entity()
     {
         return $this->morphTo();

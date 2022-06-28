@@ -71,8 +71,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('listings/search', 'ListingController@search')->name('listings.search');
 	Route::get('listings/current/{id}', 'ListingController@currentItems')->name('listings.current');
 	Route::delete('listings/deleteItem', 'ListingController@deleteItem')->name('listings.deleteItem');
-	Route::get('listings/users/table', 'ListingController@getInscribedTable')->name('listings.test');
 	Route::post('listings/save-current-users', 'ListingController@addInscribedUsersToListing')->name('listings.saveCurrentUsers');
+	Route::get('listings/users/table', 'ListingController@getInscribedTable')->name('listings.test');
 	Route::resource('listings', 'ListingController');
 
 	Route::resource('delegates', 'DelegateController');

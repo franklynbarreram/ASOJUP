@@ -8,9 +8,9 @@
         <tr>
           <th scope="col">Nombre</th>
           <th scope="col">Apellido</th>
-          <th scope="col">Enfermedad</th>
           <th scope="col">CICPC ID</th>
           <th scope="col">Telefono</th>
+          <th scope="col">Enfermedad</th>
           <th scope="col">Opciones</th>
         </tr>
       </thead>
@@ -19,9 +19,9 @@
           <tr>
             <td>{{ $user->name }}</td>
             <td>{{ $user->surname }}</td>
-            <td>{{ $user->illness_name }}</td>
             <td>{{ $user->cicpc_id }}</td>
             <td>{{ $user->phone }}</td>
+            <td>{{ $user->item_name }}</td>
             <td>
               <div class="d-flex align-items-center custom-control custom-checkbox">
                 <input
