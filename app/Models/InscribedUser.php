@@ -25,13 +25,13 @@ class InscribedUser extends Authenticatable
     ];
 
     /**-------- Relations ------ */
-    public function medicines () {
-        return $this->belongsToMany('App\Models\Medicine', 'inscribed_users_medicines');
-    }
+    // public function medicines () {
+    //     return $this->belongsToMany('App\Models\Medicine', 'inscribed_users_medicines');
+    // }
 
-    public function needs () {
-        return $this->belongsToMany('App\Models\Need', 'inscribed_users_needs');
-    }
+    // public function needs () {
+    //     return $this->belongsToMany('App\Models\Need', 'inscribed_users_needs');
+    // }
 
     public function survivors () {
         return $this->hasMany('App\Models\Survivor', 'inscribed_user_id');
@@ -155,5 +155,20 @@ class InscribedUser extends Authenticatable
         )->get()->count();
 
         return isset($result) ? $result : null;
+    }
+
+    public function needs()
+    {
+        return $this->morphedByMany('App\Models\Need', 'entity', 'inscribed_users_relationships');
+    }
+
+    public function medicines()
+    {
+        return $this->morphedByMany('App\Models\Medicine', 'entity', 'inscribed_users_relationships');
+    }
+
+    public function requests()
+    {
+        return $this->morphedByMany('App\Models\Request', 'entity', 'inscribed_users_relationships');
     }
 }

@@ -184,6 +184,10 @@ class ListingController extends Controller
 
     public function search(Request $request)
     {
+        $inscribed = InscribedUser::find(2);
+
+        return $inscribed->requests;
+
         try {
             return $this->retrieveUsers(
                 $request->listingId,
@@ -260,17 +264,7 @@ class ListingController extends Controller
                     medicines.name,
                     CONCAT(medicines.concentration, medicines_units.short_name) as spec,
                     inscribed_users_medicines.id as user_medicine_id,
-                    medicines_forms.name as pres,
-                    (
-                        IF(
-                            (
-                            SELECT inscribed_user_need
-                            FROM listings_history 
-                            WHERE inscribed_users_medicines.id = inscribed_user_need 
-                            AND listing_id = $listingId
-                        ) > 0
-                        , true, false)
-                    ) AS selected
+                    medicines_forms.name as pres
                 ")->join(
                     'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
                 )->join(

@@ -26,23 +26,25 @@
 
             <!-- <div id="example_div" data-listing-id="{{$listing->id}}"></div> -->
             <div class="row">
-                <div class="form-group col-2">
+                <div class="form-group col-3">
                     <select class="form-control" name="search_type">
                         <option value="medicine">
-                            Por medicamento
+                            Medicamento
                         </option>
                         <option value="need">
-                            Por necesidad
-                        </option>
-                        <option value="illness">
-                            Por enfermedad
+                            Necesidad / Enfermedad
                         </option>
                     </select>
                 </div>
-                <div class="form-group col-10">
-                    <input class="form-control" type="search" name="search" id="search">
+                <div class="d-flex form-group col-9">
+                    <input
+                        class="form-control"
+                        type="search"
+                        name="search"
+                        id="search"
+                        placeholder="Escribe por lo que quieras buscar y presiona la tecla 'Enter'"
+                    >
                 </div>
-
                 @include('layouts.templates.forms.add-listing-users', [])
             </div>
             <div id="jsGrid"></div>
@@ -59,8 +61,6 @@
 <script type="text/javascript" src="/js/listing.js"></script>
 <script type="text/javascript">
     const inscribedUsers = {!! json_encode($inscribedUsers) !!}
-
-    // console.log({ inscribedUsers })
 
     $("#jsGrid").jsGrid({
         width: "100%",
