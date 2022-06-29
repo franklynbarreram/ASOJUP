@@ -26,23 +26,26 @@
 
             <!-- <div id="example_div" data-listing-id="{{$listing->id}}"></div> -->
             <div class="row">
-                <div class="form-group col-3">
+                <div class="form-group col-2">
                     <select class="form-control" name="search_type">
-                        <option value="medicine">
+                        <option value="medicines">
                             Medicamento
                         </option>
-                        <option value="need">
-                            Necesidad / Enfermedad
+                        <option value="needs">
+                            Necesidad
+                        </option>
+                        <option value="diseases">
+                            Enfermedad
                         </option>
                     </select>
                 </div>
-                <div class="d-flex form-group col-9">
+                <div class="d-flex form-group col-10">
                     <input
                         class="form-control"
                         type="search"
                         name="search"
                         id="search"
-                        placeholder="Escribe por lo que quieras buscar y presiona la tecla 'Enter'"
+                        placeholder="Escribe lo que quieras buscar y presiona la tecla 'Enter'"
                     >
                 </div>
                 @include('layouts.templates.forms.add-listing-users', [])

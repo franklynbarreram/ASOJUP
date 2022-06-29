@@ -12,17 +12,41 @@ use App\Models\ListingHistory;
 
 class ListingController extends Controller
 {
+    /**
+     * Both needs and requests are stored on the same Need model and divided by an extra foreign key.
+     * 
+     * @var string
+     */
     const CLASSNAMES = [
         'needs' => 'App\Models\Need',
+        'diseases' => 'App\Models\Need',
         'medicines' => 'App\Models\Medicine',
-        'requests' => 'App\Models\Request',
     ];
 
-    const TABLENAMES = [
-        'needs' => 'App\Models\Need',
-        'medicines' => 'App\Models\Medicine',
-        'requests' => 'App\Models\Request',
+    /**
+     * Asociative array to determine the querying output of the parameter sent
+     * 
+     * @var string[]
+     */
+    const QUERYNAMES = [
+        'needs' => 'Solicitud',
+        'diseases' => 'Enfermedad',
+        'medicines' => 'Medicina',
     ];
+
+    /**
+     * Disease relation type database identificator
+     * 
+     * @var integer
+     */
+    const DISEASE_TYPE_ID = 1;
+
+    /**
+     * Request relation type database identificator
+     * 
+     * @var integer
+     */
+    const REQUEST_TYPE_ID = 2;
 
     /**
      * Display a listing of the resource.
@@ -253,9 +277,22 @@ class ListingController extends Controller
         ]);
     }
 
+    /**
+     * $type = 'diseases', 'medicines', 'requests'
+     * 
+     * 'diseases' = Enfermedades
+     * 'needs' = Necesidad
+     * 'medicines' = Medicinas, no need to extra join the query
+     */
     private function retrieveUsers($listingId, $type = NULL, $userIds = NULL)
     {
         $queryType = self::CLASSNAMES[$type];
+
+        $requirementType = self::QUERYNAMES[$type];
+
+        $selectionTypeName = $type == 'diseases' || $type == 'needs'
+            ? 'needs'
+            : 'medicines';
 
         $query = InscribedUser::select([
             'inscribed_users.id',
@@ -267,12 +304,30 @@ class ListingController extends Controller
             'inscribed_users.email',
             'inscribed_users_relationships.entity_id',
             'inscribed_users_relationships.entity_type',
-            "$type.name AS item_name",
+            "$selectionTypeName.name AS item_name",
+            DB::raw("'$requirementType' AS requirement_type")
         ])->join(
             'inscribed_users_relationships', 'inscribed_users.id', '=', 'inscribed_users_relationships.inscribed_user_id'
-        )->join(
-            $type, 'inscribed_users_relationships.entity_id', '=', "$type.id"
-        )->where(
+        );
+
+        // Do the join separation depending on the types sent via parameter
+        if ($type == 'diseases' || $type == 'needs') {
+            $needTypeId = $type === 'diseases' ? self::DISEASE_TYPE_ID : self::REQUEST_TYPE_ID;
+
+            $query->join(
+                'needs', 'inscribed_users_relationships.entity_id', '=', 'needs.id'
+            )->where(
+                'needs.need_type_id', $needTypeId 
+            );
+        } else {
+            // If none of the both were sent, just do the join relation with medicines table
+            $query->join(
+                'medicines', 'inscribed_users_relationships.entity_id', '=', 'medicines.id'
+            );
+        }
+
+        // Extract relations by the entity class type string sent
+        $query->where(
             'inscribed_users_relationships.entity_type', $queryType
         );
 
