@@ -7,7 +7,21 @@
             <h1 class="text-center">Inscritos que podrian ser relacionados</h1>
           </div>
           <div class="card-body">
-            <div id="users-list" class="users-list"></div>
+            <form id="cust-form" role="form" action="{{ url('/listings/history/1')}}" method="GET">
+              {{ csrf_field() }}
+              <div class="table-responsive inscribed-users-table">
+                <input type="hidden" name="inscribedIds[]" id="inscribedIds" />
+                <input type="hidden" name="listingId" id="listingId" value="1" />
+
+                <!-- Dynamic list of users rendered by jquery html put -->
+                <div id="users-list" class="users-list"></div>
+              </div>
+              <div class="text-center">
+                <button id="btn-submit-inscribed-users" type="submit" class="btn btn-success my-4">
+                  Agregar usuarios
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

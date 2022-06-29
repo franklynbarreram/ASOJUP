@@ -27,7 +27,7 @@
             <!-- <div id="example_div" data-listing-id="{{$listing->id}}"></div> -->
             <div class="row">
                 <div class="form-group col-2">
-                    <select class="form-control" name="search_type">
+                    <select class="form-control" name="search_type" id="search_type">
                         <option value="medicines">
                             Medicamento
                         </option>
@@ -48,9 +48,17 @@
                         placeholder="Escribe lo que quieras buscar y presiona la tecla 'Enter'"
                     >
                 </div>
-                @include('layouts.templates.forms.add-listing-users', [])
+                @include('layouts.templates.forms.add-listing-users', [
+                    
+                ])
             </div>
-            <div id="jsGrid"></div>
+
+            @if(count($inscribedUsers) == 0)
+                <h1 class="text-center mt-2 mb-2">No hay datos para mostrar</h1>
+                <h5 class="text-center">Puedes buscar y seleccionar a los inscritos que quieras agregar para guardar el listado</h5>
+            @else
+                <div id="jsGrid"></div>
+            @endif
         </div>
     </div>
 </div>
@@ -61,9 +69,16 @@
 <!-- <script src="/js/app.js"></script> -->
 <!-- <script type="text/javascript" src="/tabulator/js/tabulator.js"></script> -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
-<script type="text/javascript" src="/js/listing.js"></script>
 <script type="text/javascript">
+    const sidebarLink = document.getElementById("listing-link");
+    sidebarLink.classList.remove("collapsed");
+    sidebarLink.setAttribute("aria-expanded", true);
+
+    const sidebarOptions = document.getElementById("listing-options");
+    sidebarOptions.classList.add("show");
+
     const inscribedUsers = {!! json_encode($inscribedUsers) !!}
+    const listing = {!! json_encode($listing) !!}
 
     $("#jsGrid").jsGrid({
         width: "100%",
@@ -73,14 +88,42 @@
         paging: true,
         data: inscribedUsers,
         fields: [
+            { name: "identification", type: "text" },
             { name: "name", type: "text" },
             { name: "surname", type: "text" },
-            { name: "cicpc_id", type: "text" },
-            { name: "disease_name", type: "text" },
             { name: "email", type: "text" },
-            { name: "identification", type: "text" },
+            { name: "cicpc_id", type: "text" },
+            { name: "item_name", type: "text" },
+            { name: "requirement_type", type: "text" },
             { type: "control" },
         ],
+    });
+
+    const typeSelector = document.getElementById('search_type');
+
+    document.getElementById("search").addEventListener("keypress", (e) => {
+        if (e.key !== "Enter") {
+            return;
+        }
+
+        $.ajax({
+            // headers: { "X-CSRF-TOKEN": token },
+            type: "GET",
+            url: "http://localhost:8000/listings/users/table",
+            data: {
+                listingId: listing.id,
+                type: typeSelector.value,
+            },
+            success: (response) => {
+                // Directly inject the dynamic html output
+                $("#users-list").html(response);
+                $("#listing-users-form").modal("show");
+            },
+            error: (XMLHttpRequest, textStatus, errorThrown) => {
+                console.log(XMLHttpRequest);
+                console.error({ textStatus, errorThrown });
+            },
+        });
     });
 </script>
 @endpush

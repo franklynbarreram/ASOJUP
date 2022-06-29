@@ -156,9 +156,10 @@ class ListingController extends Controller
 
         if ($request->inscribedIds) {
             $userIds = explode(',', $request->inscribedIds[0]);
-            $inscribedUsers = $this->retrieveUsers($listing->id, NULL, $userIds);
+            $inscribedUsers = $this->retrieveUsers($listing->id, $request->type, $userIds);
         }
         
+
         return view('admin.listings.history', [
             'listing' => $listing,
             'inscribedUsers' => $inscribedUsers,
@@ -166,15 +167,8 @@ class ListingController extends Controller
     }
 
     /**
-     *   {title:"Nombre Completo", field:"fullname", width: 175},
-     *   {title:"Cédula", field:"identification"},
-     *   {title:"Teléfono", field:"phone_number"},
-     *   {title:"Enfermedad", field:"disease"},
-     *   {title:"Medicina", field:"medicine_name"},
-     *   {title:"Presentación", field:"medicine_presentation"},
-     *   {title:"Cantidad", field:"medicine_quantity"},
-     *   {title:"Medicine User Id", field:"user_medicine_id"}
-    */
+     * 
+     */
     public function currentItems($listing_id)
     {
         try {
@@ -263,7 +257,8 @@ class ListingController extends Controller
         $users = $this->search($request);
 
         return view('layouts.templates.inscribed-users-table', [
-            'users' => $users
+            'users' => $users,
+            'type' => $request->type,
         ])->render();
     }
 
@@ -286,6 +281,8 @@ class ListingController extends Controller
      */
     private function retrieveUsers($listingId, $type = NULL, $userIds = NULL)
     {
+        DB::statement(DB::raw('set @row:=0'));
+
         $queryType = self::CLASSNAMES[$type];
 
         $requirementType = self::QUERYNAMES[$type];
@@ -295,6 +292,7 @@ class ListingController extends Controller
             : 'medicines';
 
         $query = InscribedUser::select([
+            DB::raw('@row:=@row+1 as row'),
             'inscribed_users.id',
             'inscribed_users.name',
             'inscribed_users.surname',
