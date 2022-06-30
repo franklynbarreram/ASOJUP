@@ -9,6 +9,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
 	return redirect()->route('home');
@@ -18,11 +20,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
 Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
 Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
 Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
-
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -68,16 +68,20 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('needs', 'NeedController');
 
 	//Listing
-	Route::get('listings/history/{id}', 'ListingController@history')->name('listings.history');
+	Route::get('listings/history/{listingId}', 'ListingController@history')->name('listings.history');
 	Route::get('listings/search', 'ListingController@search')->name('listings.search');
 	Route::get('listings/current/{id}', 'ListingController@currentItems')->name('listings.current');
-	Route::post('listings/pickItem', 'ListingController@pickItem')->name('listings.pick');
-	Route::put('listings/updateAmount', 'ListingController@updateAmount')->name('listings.updateAmount');
 	Route::delete('listings/deleteItem', 'ListingController@deleteItem')->name('listings.deleteItem');
+	Route::post('listings/save-current-users', 'ListingController@addInscribedUsersToListing')->name('listings.saveCurrentUsers');
+	Route::get('listings/users/table', 'ListingController@getInscribedTable')->name('listings.test');
 	Route::resource('listings', 'ListingController');
 
 	Route::resource('delegates', 'DelegateController');
 	Route::post('delegates/eliminar', 'DelegateController@eliminar');
 	Route::resource('permissions', 'PermissionController');
+
+	Route::put('listings/history/{listingId}/users', 'ListingHistoryController@saveListingUsersData')->name('listings.history.saveUsersData');
+
 });
 
+	// Listing History Routes

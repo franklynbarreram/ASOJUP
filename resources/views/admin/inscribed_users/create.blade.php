@@ -54,7 +54,6 @@
                         <label for="address" class="form-control-label">Dirección</label>
                         <input class="form-control" name="address" type="text" placeholder="Calle #2 Carrera #3 C-07" id="address" required>
                     </div>
-                    
 
                     <!-- Extra data -->
                     <h1>Información Extra</h1>
@@ -105,7 +104,6 @@
                             Registrar
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -128,7 +126,6 @@
         ])
     </div>
 
-    
     <!-- Success Modal -->
     <button id="success-modal-btn" type="button" data-toggle="modal" data-target="#modal-notification" style="display:none;">
         Notification

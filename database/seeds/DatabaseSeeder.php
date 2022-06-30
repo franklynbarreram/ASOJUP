@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\InscribedUser;
-use App\Models\InscribedUserMedicine;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ZoneSeeder::class,
             NeedTypeSeeder::class,
             NeedSeeder::class,
+            RequestSeeder::class,
             MedicineFormSeeder::class,
             MedicineUnitSeeder::class,
             MedicineSeeder::class,
@@ -25,6 +24,7 @@ class DatabaseSeeder extends Seeder
             InscribedUserSeeder::class,
             InscribedUserMedicineSeeder::class,
             InscribedUserNeedSeeder::class,
+            InscribedUserRelationshipSeeder::class,
         ];
 
         foreach ($classes as $class) {

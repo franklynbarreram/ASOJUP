@@ -1,0 +1,8 @@
+.modified-modal {
+  max-width: 1232px !important;
+}
+
+.inscribed-users-table {
+  max-height: 500px;
+  overflow-y: auto;
+}

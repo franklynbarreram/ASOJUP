@@ -13,7 +13,9 @@ class Need extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at', 'pivot'
+        'created_at',
+        'updated_at',
+        'pivot',
     ];
 
     /**
@@ -21,15 +23,23 @@ class Need extends Model
      * 
      * @param nt_id references the need_type_id sent in the scope
      */
-    public function scopeSearchById ($query, $nt_id) {
+    public function scopeSearchById($query, $nt_id)
+    {
         return $query->where('need_type_id', $nt_id)->orderBy('name', 'asc');
     }
 
-    public function scopeDiseases ($query) {
+    public function scopeDiseases($query)
+    {
         return $query->where('need_type_id', 1)->orderBy('name', 'asc');
     }
 
-    public function scopeBenefits ($query) {
+    public function scopeBenefits($query)
+    {
         return $query->where('need_type_id', 2)->orderBy('name', 'asc');
+    }
+
+    public function inscribedUsers()
+    {
+        return $this->morphToMany('App\Models\InscribedUser', 'inscribed_users_relationships');
     }
 }
