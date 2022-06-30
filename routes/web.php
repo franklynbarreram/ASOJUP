@@ -9,6 +9,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
 	return redirect()->route('home');
@@ -21,7 +23,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
 Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
 Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
-
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -78,5 +79,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('delegates', 'DelegateController');
 	Route::post('delegates/eliminar', 'DelegateController@eliminar');
 	Route::resource('permissions', 'PermissionController');
+
+	Route::put('listings/history/{listingId}/users', 'ListingHistoryController@saveListingUsersData')->name('listings.history.saveUsersData');
+
 });
 
+	// Listing History Routes

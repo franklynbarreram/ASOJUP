@@ -35,22 +35,3 @@
     @endforeach
   </tbody>
 </table>
-
-<script type="text/javascript">
-  let inscribedIdsInput = document.getElementById('inscribedIds');
-  let ids = inscribedIdsInput.value || [];
-
-  const handleInputClick = (checkboxElement) => {
-    const inscribedUserId = checkboxElement.dataset.userId;
-
-    const index = ids.indexOf(inscribedUserId)
-
-    if (index > -1) {
-      ids.splice(index, 1)
-    } else {
-      ids.push(inscribedUserId)
-    }
-
-    inscribedIdsInput.value = ids;
-  }
-</script>

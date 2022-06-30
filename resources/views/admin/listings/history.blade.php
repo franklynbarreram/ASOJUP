@@ -58,6 +58,11 @@
                 <h5 class="text-center">Puedes buscar y seleccionar a los inscritos que quieras agregar para guardar el listado</h5>
             @else
                 <div id="jsGrid"></div>
+                <div class="row d-flex justify-content-center">
+                    <button id="submit-listing" class="btn btn-success">
+                        Guardar Listado
+                    </button>
+                </div>
             @endif
         </div>
     </div>
@@ -79,7 +84,9 @@
 
     const inscribedUsers = {!! json_encode($inscribedUsers) !!}
     const listing = {!! json_encode($listing) !!}
+    let token = $( "input[name='_token']" ).val();
 
+    // JS Grid table
     $("#jsGrid").jsGrid({
         width: "100%",
         height: "400px",
@@ -101,6 +108,7 @@
 
     const typeSelector = document.getElementById('search_type');
 
+    // Key event listener for search input
     document.getElementById("search").addEventListener("keypress", (e) => {
         if (e.key !== "Enter") {
             return;
@@ -125,5 +133,48 @@
             },
         });
     });
+
+    // Handle modal user lists item selection
+    let inscribedIdsInput = document.getElementById('inscribedIds');
+    let ids = inscribedIdsInput.value || [];
+
+    const handleInputClick = (checkboxElement) => {
+        const inscribedUserId = checkboxElement.dataset.userId;
+        const index = ids.indexOf(inscribedUserId)
+
+        if (index > -1) {
+            ids.splice(index, 1)
+        } else {
+            ids.push(inscribedUserId)
+        }
+
+        inscribedIdsInput.value = ids;
+    }
+
+    // Submit listing handler
+    const submitListingButton = document.getElementById('submit-listing');
+
+    if (submitListingButton) {
+        submitListingButton.onclick = () => {
+            const gridData = $("#jsGrid").jsGrid("option", "data");
+
+            $.ajax({
+                headers: { "X-CSRF-TOKEN": token },
+                type: "PUT",
+                url: `http://localhost:8000/listings/history/${listing.id}/users`,
+                data: {
+                    data: JSON.stringify(gridData),
+                    listingId: listing.id,
+                },
+                success: (response) => {
+                    console.log(response)
+                },
+                error: (XMLHttpRequest, textStatus, errorThrown) => {
+                    console.log(XMLHttpRequest);
+                    console.error({ textStatus, errorThrown });
+                },
+            });
+        }
+    }
 </script>
 @endpush

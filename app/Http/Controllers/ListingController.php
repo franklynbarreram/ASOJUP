@@ -337,4 +337,18 @@ class ListingController extends Controller
 
         return $query->get();
     }
+
+    public function saveListingUsersData(Request $request, $listingId)
+    {
+        $listing = Listing::find($listingId);
+        $listing->inscribed_users_data = $request->data;
+        $listing->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Listing JSON data saved successfully',
+            'listing' => $listing,
+            'data' => $request->data,
+        ], 200);
+    }
 }
