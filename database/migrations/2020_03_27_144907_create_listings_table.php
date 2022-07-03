@@ -15,13 +15,12 @@ class CreateListingsTable extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->increments('id');
-
             $table->string('description');
             $table->datetime('date');
-            
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            $table->string('status')->default('pending')->nullable();
+            $table->json('inscribed_users_data')->nullable();
             $table->timestamps();
         });
     }

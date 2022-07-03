@@ -7,7 +7,7 @@
             <h1 class="text-center">Inscritos que podrian ser relacionados</h1>
           </div>
           <div class="card-body">
-            <form id="inscribed-users-listing-form" role="form" action="{{ url('/listings/history/1')}}" method="GET">
+            <form id="inscribed-users-listing-form" role="form">
               {{ csrf_field() }}
               <div class="table-responsive inscribed-users-table">
                 <input type="hidden" name="inscribedIds[]" id="inscribedIds" />
@@ -17,7 +17,7 @@
                 <div id="users-list" class="users-list"></div>
               </div>
               <div class="text-center">
-                <button id="inscribed-users-listing-form-submit" type="submit" class="btn btn-success my-4">
+                <button id="inscribed-users-listing-form-submit" type="button" class="btn btn-success my-4">
                   Agregar usuarios
                 </button>
               </div>

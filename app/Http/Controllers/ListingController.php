@@ -148,128 +148,39 @@ class ListingController extends Controller
         //
     }
 
+    /**
+     * 
+     */
     public function history(Request $request)
     {
         $listing = Listing::find($request->listingId);
 
-        $inscribedUsers = [];
-
-        if ($request->inscribedIds) {
-            $userIds = explode(',', $request->inscribedIds[0]);
-            $inscribedUsers = $this->retrieveUsers($listing->id, $request->type, $userIds);
-        }
-        
-
         return view('admin.listings.history', [
             'listing' => $listing,
-            'inscribedUsers' => $inscribedUsers,
+            'inscribedUsers' => json_decode($listing->inscribed_users_data),
         ]);
     }
 
     /**
      * 
      */
-    public function currentItems($listing_id)
-    {
-        try {
-            $items = ListingHistory::selectRaw(
-                "
-                CONCAT(inscribed_users.name, CONCAT(' ', inscribed_users.surname)) AS fullname,
-                inscribed_users.identification,
-                inscribed_users.phone AS phone_number,
-                needs.name as disease,
-                inscribed_users_medicines.id as user_medicine_id,
-                medicines.id AS medicine_id,
-                medicines.name AS medicine_name,
-                CONCAT(medicines_forms.name, CONCAT(' ', CONCAT(medicines.concentration, medicines_units.short_name))) AS medicine_presentation,
-                listings_history.amount as medicine_quantity
-                "
-            )->join(
-                'inscribed_users_medicines', 'listings_history.inscribed_user_medicine_id', '=', 'inscribed_users_medicines.id'
-            )->join(
-                'inscribed_users', 'inscribed_users_medicines.inscribed_user_id', '=', 'inscribed_users.id'
-            )->join(
-                'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
-            )->join(
-                'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
-            )->join(
-                'medicines', 'inscribed_users_medicines.medicine_id', '=', 'medicines.id'
-            )->join(
-                'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
-            )->join(
-                'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
-            )->where(
-                'listing_id', $listing_id
-            )->where(
-                'needs.need_type_id', 1
-            )->get();
-
-            return $items;
-        } catch (\Exception $e) {
-            return response()->json([
-                'status'    =>  'failed',
-                'message'   =>  $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function search(Request $request)
-    {
-        try {
-            return $this->retrieveUsers(
-                $request->listingId,
-                $request->type,
-            );
-        } catch (\Exception $e) {
-            return response()->json([
-                'status'    =>  'failed',
-                'message'   =>  $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function deleteItem(Request $request)
-    {
-        try {
-
-            $listing_item = ListingHistory::where([
-                'listing_id'                    =>  $request->listing_id,
-                'inscribed_user_medicine_id'    =>  $request->inscribed_user_medicine_id
-            ])->first();
-
-            $listing_item->delete();
-
-            return response()->json([
-                'status'    =>  'success',
-                'message'   =>  'Item found!'
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'status'    =>  'failed',
-                'message'   =>  $e->getMessage()
-            ], 500);
-        }
-    }
-
     public function getInscribedTable(Request $request)
     {
-        $users = $this->search($request);
+        $users = $this->retrieveUsers(
+            $request->type,
+            $request->searchValue,
+        );
 
         return view('layouts.templates.inscribed-users-table', [
             'users' => $users,
             'type' => $request->type,
+            'selectedUsers' => $request->selectedUsers,
         ])->render();
     }
 
-    public function addInscribedUsersToListing(Request $request)
+    public function getUsersTable(Request $request)
     {
-        $request->listingId = 1;
-
-        return redirect()->route('listings.history', [
-            'listingId' => 1,
-            'userIds' => $request->inscribedIds[0]
-        ]);
+        return $request->all();
     }
 
     /**
@@ -279,17 +190,17 @@ class ListingController extends Controller
      * 'needs' = Necesidad
      * 'medicines' = Medicinas, no need to extra join the query
      */
-    private function retrieveUsers($listingId, $type = NULL, $userIds = NULL)
+    private function retrieveUsers($type = NULL, $searchValue = '')
     {
         DB::statement(DB::raw('set @row:=0'));
-
-        $queryType = self::CLASSNAMES[$type];
 
         $requirementType = self::QUERYNAMES[$type];
 
         $selectionTypeName = $type == 'diseases' || $type == 'needs'
             ? 'needs'
             : 'medicines';
+
+        $joiningTable = $type == 'medicines' ? 'inscribed_users_medicines' : 'inscribed_users_needs';
 
         $query = InscribedUser::select([
             DB::raw('@row:=@row+1 as row'),
@@ -300,12 +211,11 @@ class ListingController extends Controller
             'inscribed_users.cicpc_id',
             'inscribed_users.phone',
             'inscribed_users.email',
-            'inscribed_users_relationships.entity_id',
-            'inscribed_users_relationships.entity_type',
             "$selectionTypeName.name AS item_name",
-            DB::raw("'$requirementType' AS requirement_type")
+            "$selectionTypeName.id AS item_id",
+            DB::raw("'$requirementType' AS requirement_type"),
         ])->join(
-            'inscribed_users_relationships', 'inscribed_users.id', '=', 'inscribed_users_relationships.inscribed_user_id'
+            $joiningTable, 'inscribed_users.id', '=', "$joiningTable.inscribed_user_id"
         );
 
         // Do the join separation depending on the types sent via parameter
@@ -313,27 +223,28 @@ class ListingController extends Controller
             $needTypeId = $type === 'diseases' ? self::DISEASE_TYPE_ID : self::REQUEST_TYPE_ID;
 
             $query->join(
-                'needs', 'inscribed_users_relationships.entity_id', '=', 'needs.id'
+                'needs', "$joiningTable.need_id", '=', 'needs.id'
             )->where(
                 'needs.need_type_id', $needTypeId 
             );
         } else {
             // If none of the both were sent, just do the join relation with medicines table
             $query->join(
-                'medicines', 'inscribed_users_relationships.entity_id', '=', 'medicines.id'
+                'medicines', "$joiningTable.medicine_id", '=', 'medicines.id'
             );
         }
 
-        // Extract relations by the entity class type string sent
-        $query->where(
-            'inscribed_users_relationships.entity_type', $queryType
-        );
-
-        if ($userIds) {
-            $query->whereIn(
-                'inscribed_users.id', $userIds
+        if ($searchValue) {
+            $query->where(
+                "$selectionTypeName.name", 'like', "%$searchValue%"
             );
         }
+
+        // if ($userIds) {
+        //     $query->whereIn(
+        //         'inscribed_users.id', $userIds
+        //     );
+        // }
 
         return $query->get();
     }
