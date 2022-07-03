@@ -48,26 +48,20 @@
                         placeholder="Escribe lo que quieras buscar y presiona la tecla 'Enter'"
                     >
                 </div>
+
                 @include('layouts.templates.forms.add-listing-users', [
-                    
+                    'listingId' => $listing->id
                 ])
             </div>
-
-            @if(count($inscribedUsers) == 0)
-                <h1 class="text-center mt-2 mb-2">No hay datos para mostrar</h1>
-                <h5 class="text-center">Puedes buscar y seleccionar a los inscritos que quieras agregar para guardar el listado</h5>
-            @else
-                <div id="jsGrid"></div>
-                <div class="row d-flex justify-content-center">
-                    <button id="submit-listing" class="btn btn-success">
-                        Guardar Listado
-                    </button>
-                </div>
-            @endif
+            <div id="jsGrid"></div>
+            <div class="row d-flex justify-content-center">
+                <button id="submit-listing" class="btn btn-success">
+                    Guardar Listado
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
 @endsection
 
 @push('js')
@@ -82,8 +76,8 @@
     const sidebarOptions = document.getElementById("listing-options");
     sidebarOptions.classList.add("show");
 
-    const inscribedUsers = {!! json_encode($inscribedUsers) !!}
-    const listing = {!! json_encode($listing) !!}
+    let inscribedUsers = {!! json_encode($inscribedUsers) !!}
+    let listing = {!! json_encode($listing) !!}
     let token = $( "input[name='_token']" ).val();
 
     // JS Grid table
@@ -93,15 +87,13 @@
         editing: true,
         sorting: true,
         paging: true,
-        data: inscribedUsers,
+        data: inscribedUsers || [],
         fields: [
-            { name: "identification", type: "text" },
-            { name: "name", type: "text" },
-            { name: "surname", type: "text" },
-            { name: "email", type: "text" },
-            { name: "cicpc_id", type: "text" },
-            { name: "item_name", type: "text" },
-            { name: "requirement_type", type: "text" },
+            { name: "identification", type: "text", title:"Cedula" },
+            { name: "name", type: "text", title: "Nombre" },
+            { name: "surname", type: "text", title: "Apellido" },
+            { name: "item_name", type: "text", title: "Requerimiento" },
+            { name: "requirement_type", type: "text", title: "Tipo" },
             { type: "control" },
         ],
     });
@@ -109,10 +101,14 @@
     const typeSelector = document.getElementById('search_type');
 
     // Key event listener for search input
-    document.getElementById("search").addEventListener("keypress", (e) => {
+    document.getElementById("search").addEventListener("keypress", function (e) {
         if (e.key !== "Enter") {
             return;
         }
+
+        const searchValue = this.value;
+
+        const jsGridData = $("#jsGrid").jsGrid("option", "data") ?? [];
 
         $.ajax({
             // headers: { "X-CSRF-TOKEN": token },
@@ -121,6 +117,8 @@
             data: {
                 listingId: listing.id,
                 type: typeSelector.value,
+                searchValue: searchValue,
+                selectedUsers: inscribedUsers || [],
             },
             success: (response) => {
                 // Directly inject the dynamic html output
@@ -135,20 +133,33 @@
     });
 
     // Handle modal user lists item selection
-    let inscribedIdsInput = document.getElementById('inscribedIds');
-    let ids = inscribedIdsInput.value || [];
-
     const handleInputClick = (checkboxElement) => {
         const inscribedUserId = checkboxElement.dataset.userId;
-        const index = ids.indexOf(inscribedUserId)
+        const existentIndex = inscribedUsers.findIndex((inscribed) => inscribed.user_id === inscribedUserId)
 
-        if (index > -1) {
-            ids.splice(index, 1)
-        } else {
-            ids.push(inscribedUserId)
+        const item  = {
+            identification: checkboxElement.dataset.userIdentification,
+            name: checkboxElement.dataset.userName,
+            surname: checkboxElement.dataset.userSurname,
+            item_name: checkboxElement.dataset.userItem_name,
+            item_id: checkboxElement.dataset.userItem_id,
+            requirement_type: checkboxElement.dataset.userRequirement_type,
+            user_id: inscribedUserId,
         }
 
-        inscribedIdsInput.value = ids;
+        if (existentIndex > -1) {
+            inscribedUsers.splice(existentIndex, 1)
+        } else {
+            inscribedUsers.push(item)
+        }
+
+        $("#jsGrid").jsGrid("option", "data", inscribedUsers);
+    }
+
+    const submitTableButton = document.getElementById('inscribed-users-listing-form-submit');
+
+    submitTableButton.onclick = () => {
+        $("#listing-users-form").modal("hide");
     }
 
     // Submit listing handler

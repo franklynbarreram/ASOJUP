@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             ZoneSeeder::class,
             NeedTypeSeeder::class,
             NeedSeeder::class,
-            RequestSeeder::class,
+            // RequestSeeder::class,
             MedicineFormSeeder::class,
             MedicineUnitSeeder::class,
             MedicineSeeder::class,
@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             InscribedUserSeeder::class,
             InscribedUserMedicineSeeder::class,
             InscribedUserNeedSeeder::class,
-            InscribedUserRelationshipSeeder::class,
+            // InscribedUserRelationshipSeeder::class,
         ];
 
         foreach ($classes as $class) {
