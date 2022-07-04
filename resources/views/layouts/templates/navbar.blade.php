@@ -1,8 +1,8 @@
 <!-- Top navbar -->
-<nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
+<nav class="navbar navbar-top navbar-expand-lg navbar-dark d-none d-lg-block" id="navbar-main">
     <div class="container-fluid">
         <!-- Brand -->
-        <a class="h4 mb-0 text-white text-uppercase d-none d-mdpermission_delegated -inline-block" href="{{ route('home') }}">{{ __('Inicio') }}</a>
+        <a class="h4 mb-0 text-white text-uppercase d-none  d-md-inline-block" href="{{ route('home') }}">{{ __('Inicio') }}</a>
         <!-- Form -->
         <form class=" d-none navbar-search navbar-search-dark form-inline mr-3 d-none ml-lg-auto">
             <div class="form-group mb-0">

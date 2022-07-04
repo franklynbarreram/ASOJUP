@@ -7,7 +7,7 @@
                     <h1 class=" text-white pb-1">
                         {{ $title }}
                     </h1>
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center pb-4">
                         <img src="{{ asset('imgs') }}/AsojupLogo.png" class="" alt="..." id="LogoNavbar">
                     </div>
                 </div>
