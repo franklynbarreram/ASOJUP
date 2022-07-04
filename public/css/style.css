@@ -1,5 +1,10 @@
-#btn-delete{
-    background-color: white;
-    border: none;
-    cursor: pointer;
+#btn-delete {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#LogoNavbar {
+  width: 100px;
+  height: 100px;
 }

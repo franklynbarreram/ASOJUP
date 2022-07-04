@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\InscribedUser;
 use App\Models\Listing;
 use App\Models\ListingHistory;
+use App\Models\Permission;
 
 class ListingController extends Controller
+
 {
     /**
      * Display a listing of the resource.
@@ -18,11 +20,20 @@ class ListingController extends Controller
      */
     public function index(Request $request)
     {
+        $admin = Auth::user();
         $listings = Listing::orderBy('created_at', 'desc')->paginate(10);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
 
-        return view('admin.listings.index', [
-            'listings'  =>  $listings
-        ]);
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.listings.index', [
+                'listings'  =>  $listings,
+                'permission_delegated' => $permission_delegated
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -32,7 +43,16 @@ class ListingController extends Controller
      */
     public function create()
     {
-        return view('admin.listings.create');
+        $admin = Auth::user();
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.listings.create', ['permission_delegated' => $permission_delegated,]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -52,9 +72,11 @@ class ListingController extends Controller
         return redirect()->route(
             'listings.index'
         )->with(
-            'notification', 'Se ha creado el listado satisfactoriamente'
+            'notification',
+            'Se ha creado el listado satisfactoriamente'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -78,14 +100,25 @@ class ListingController extends Controller
     public function edit($id)
     {
         //
-         $listing = Listing::find(1);
-        $listings = Listing::orderBy('created_at', 'desc')->paginate(10);
 
-        return view('admin.listings.edit', [
-            'listing'  =>  $listing
-        ]);
-      
-       /*  return view('admin.listings.edit', ['listing' =>  $listing]);  */
+        $admin = Auth::user();
+        $listing = Listing::find(1);
+        $listings = Listing::orderBy('created_at', 'desc')->paginate(10);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.listings.edit', [
+                'listing'  =>  $listing,
+                'listings'  =>  $listings,
+                'permission_delegated' => $permission_delegated
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
+
+
+        /*  return view('admin.listings.edit', ['listing' =>  $listing]);  */
     }
 
     /**
@@ -99,7 +132,6 @@ class ListingController extends Controller
     {
         //
         return $id;
-        
     }
 
     /**
@@ -113,13 +145,21 @@ class ListingController extends Controller
         //
     }
 
-    public function history ($listing_id) {
-        
+    public function history($listing_id)
+    {
+        $admin = Auth::user();
         $listing = Listing::find($listing_id);
-        
-        return view('admin.listings.history', [
-            'listing'   =>  $listing
-        ]);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.listings.history', [
+                'listing'  =>  $listing,
+                'permission_delegated' => $permission_delegated
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -131,8 +171,9 @@ class ListingController extends Controller
      *   {title:"Presentación", field:"medicine_presentation"},
      *   {title:"Cantidad", field:"medicine_quantity"},
      *   {title:"Medicine User Id", field:"user_medicine_id"}
-    */
-    public function currentItems ($listing_id) {
+     */
+    public function currentItems($listing_id)
+    {
         try {
             $items = ListingHistory::selectRaw(
                 "
@@ -147,23 +188,46 @@ class ListingController extends Controller
                 listings_history.amount as medicine_quantity
                 "
             )->join(
-                'inscribed_users_medicines', 'listings_history.inscribed_user_medicine_id', '=', 'inscribed_users_medicines.id'
+                'inscribed_users_medicines',
+                'listings_history.inscribed_user_medicine_id',
+                '=',
+                'inscribed_users_medicines.id'
             )->join(
-                'inscribed_users', 'inscribed_users_medicines.inscribed_user_id', '=', 'inscribed_users.id'
+                'inscribed_users',
+                'inscribed_users_medicines.inscribed_user_id',
+                '=',
+                'inscribed_users.id'
             )->join(
-                'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
+                'inscribed_users_needs',
+                'inscribed_users.id',
+                '=',
+                'inscribed_users_needs.inscribed_user_id'
             )->join(
-                'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
+                'needs',
+                'inscribed_users_needs.need_id',
+                '=',
+                'needs.id'
             )->join(
-                'medicines', 'inscribed_users_medicines.medicine_id', '=', 'medicines.id'
+                'medicines',
+                'inscribed_users_medicines.medicine_id',
+                '=',
+                'medicines.id'
             )->join(
-                'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
+                'medicines_units',
+                'medicines.medicine_unit_id',
+                '=',
+                'medicines_units.id'
             )->join(
-                'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
+                'medicines_forms',
+                'medicines.medicine_form_id',
+                '=',
+                'medicines_forms.id'
             )->where(
-                'listing_id', $listing_id
+                'listing_id',
+                $listing_id
             )->where(
-                'needs.need_type_id', 1
+                'needs.need_type_id',
+                1
             )->get();
 
             return $items;
@@ -175,14 +239,20 @@ class ListingController extends Controller
         }
     }
 
-    public function search (Request $request) {
+    public function search(Request $request)
+    {
         try {
 
             $users = InscribedUser::select(
                 'inscribed_users.id',
-                'inscribed_users.name', 'inscribed_users.surname', 'inscribed_users.identification',
-                'inscribed_users.cicpc_id', 'inscribed_users.phone', 'inscribed_users.email',
-                'needs.id as disease_id', 'needs.name as disease_name'
+                'inscribed_users.name',
+                'inscribed_users.surname',
+                'inscribed_users.identification',
+                'inscribed_users.cicpc_id',
+                'inscribed_users.phone',
+                'inscribed_users.email',
+                'needs.id as disease_id',
+                'needs.name as disease_name'
             )->with([
                 'medicines' => function ($query) use ($request) {
                     $query->selectRaw(
@@ -200,21 +270,36 @@ class ListingController extends Controller
                                 AND listing_id = $request->listingId) > 0
                             , true, false)
                         ) AS selected
-                        " 
+                        "
                     )->join(
-                        'medicines_units', 'medicines.medicine_unit_id', '=', 'medicines_units.id'
+                        'medicines_units',
+                        'medicines.medicine_unit_id',
+                        '=',
+                        'medicines_units.id'
                     )->join(
-                        'medicines_forms', 'medicines.medicine_form_id', '=', 'medicines_forms.id'
+                        'medicines_forms',
+                        'medicines.medicine_form_id',
+                        '=',
+                        'medicines_forms.id'
                     );
                 }
             ])->join(
-                'inscribed_users_needs', 'inscribed_users.id', '=', 'inscribed_users_needs.inscribed_user_id'
+                'inscribed_users_needs',
+                'inscribed_users.id',
+                '=',
+                'inscribed_users_needs.inscribed_user_id'
             )->join(
-                'needs', 'inscribed_users_needs.need_id', '=', 'needs.id'
+                'needs',
+                'inscribed_users_needs.need_id',
+                '=',
+                'needs.id'
             )->where(
-                'needs.need_type_id', 1
+                'needs.need_type_id',
+                1
             )->where(
-                'needs.name', 'like', '%' . $request->disease . '%'
+                'needs.name',
+                'like',
+                '%' . $request->disease . '%'
             )->get();
 
             return $users;
@@ -226,13 +311,16 @@ class ListingController extends Controller
         }
     }
 
-    public function pickItem (Request $request) {
+    public function pickItem(Request $request)
+    {
         try {
 
             $listing_item = ListingHistory::where(
-                'listing_id', $request->listing_id
+                'listing_id',
+                $request->listing_id
             )->where(
-                'inscribed_user_medicine_id', $request->inscribed_user_medicine_id
+                'inscribed_user_medicine_id',
+                $request->inscribed_user_medicine_id
             )->first();
 
             if ($listing_item) {
@@ -256,16 +344,16 @@ class ListingController extends Controller
                 'message'   =>  'Item has been succesfully added',
                 'deleted'   =>  false
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status'    =>  'failed',
                 'message'   =>  $e->getMessage()
             ], 500);
-        } 
+        }
     }
 
-    public function updateAmount (Request $request) {
+    public function updateAmount(Request $request)
+    {
         try {
 
             $listing_item = ListingHistory::where([
@@ -280,7 +368,6 @@ class ListingController extends Controller
                 'status'    =>  'success',
                 'message'   =>  'item amount succesfully updated'
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'status'    =>  'failed',
@@ -289,7 +376,8 @@ class ListingController extends Controller
         }
     }
 
-    public function deleteItem (Request $request) {
+    public function deleteItem(Request $request)
+    {
         try {
 
             $listing_item = ListingHistory::where([
@@ -303,7 +391,6 @@ class ListingController extends Controller
                 'status'    =>  'success',
                 'message'   =>  'Item found!'
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status'    =>  'failed',

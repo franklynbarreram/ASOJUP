@@ -5,8 +5,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Brand -->
-        <a class="navbar-brand pt-0" href="{{ route('home') }}">
-            <img src="{{ asset('argon') }}/img/brand/blue.png" class="navbar-brand-img" alt="...">
+        <a class="d-flex justify-content-center pt-0" href="{{ route('home') }}">
+            <img src="{{ asset('imgs') }}/AsojupLogo.png" class="" alt="..." id="LogoNavbar">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -14,7 +14,7 @@
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
                         <span class="avatar avatar-sm rounded-circle">
-                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1-800x800.jpg">
+                            <i class="fa fa-user-circle fa-2" aria-hidden="true"></i>
                         </span>
                     </div>
                 </a>

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Models\MedicineForm;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Permission;
 
 class MedicineFormController extends Controller
 {
@@ -14,12 +17,14 @@ class MedicineFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index (Request $request)
+    public function index(Request $request)
     {
         $forms = MedicineForm::orderBy('id', 'asc')->paginate(15);
-
-        return view ('admin.medicines.forms.index', [
-            'forms' =>  $forms
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        return view('admin.medicines.forms.index', [
+            'forms' =>  $forms,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -30,7 +35,7 @@ class MedicineFormController extends Controller
      */
     public function create()
     {
-        return view ('admin.medicines.forms.create');
+        return view('admin.medicines.forms.create');
     }
 
     /**
@@ -51,7 +56,7 @@ class MedicineFormController extends Controller
 
         return redirect()->route('forms.index', [
             'notification'  =>  'Se ha creado la forma farmacéutica exitosamente',
-            'success'       =>  true  
+            'success'       =>  true
         ]);
     }
 
@@ -75,9 +80,11 @@ class MedicineFormController extends Controller
     public function edit($id)
     {
         $med_form = MedicineForm::find($id);
-
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
         return view('admin.medicines.forms.edit', [
-            'med_form'  =>  $med_form
+            'med_form'  =>  $med_form,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -101,9 +108,11 @@ class MedicineFormController extends Controller
         $med_form->save();
 
         return redirect()->route('forms.index')->with(
-            'notification', 'Se ha editado la forma farmacéutica exitosamente.'
+            'notification',
+            'Se ha editado la forma farmacéutica exitosamente.'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -116,12 +125,13 @@ class MedicineFormController extends Controller
     public function delete(Request $request)
     {
         //
-        $deletedRows = MedicineForm::where('id',$request->id)->delete(); 
+        $deletedRows = MedicineForm::where('id', $request->id)->delete();
         return redirect()->route('forms.index')->with(
-            'notification', 'Se ha editado la forma farmacéutica exitosamente.'
+            'notification',
+            'Se ha editado la forma farmacéutica exitosamente.'
         )->with(
-            'success', true
+            'success',
+            true
         );
-
     }
 }
