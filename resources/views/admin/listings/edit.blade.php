@@ -6,7 +6,6 @@
 
 @section('content')
     @include('layouts.templates.topbar')
-  
     <div class="container-fluid mt--7">
         <div class="card" style="margin-top: 12%;">
             <div class="card-body">
@@ -15,17 +14,17 @@
                 {{ csrf_field() }}
                     {{ method_field('PUT') }}
 
-                <div class="row" id="row2">
-                     <div class="form-group col-6" id="">
-                        <label for="description" class="form-control-label">Descripción</label>
-                        <input class="form-control" name="description" value="{{$listing->description}}" type="text" placeholder="Ingresa una descripción" id="name">
-                    </div>
+                    <div class="row" id="row2">
+                        <div class="form-group col-6" id="">
+                            <label for="description" class="form-control-label">Descripción</label>
+                            <input class="form-control" name="description" value="{{$listing->description}}" type="text" placeholder="Ingresa una descripción" id="name">
+                        </div>
 
-                    <div class="form-group col-6">
-                        <label for="date" class="form-control-label">Fecha para el pedido</label>
-                        <input class="form-control" name="date" type="date" value="{{$listing->date}}" id="date">
-                    </div> 
-                </div>
+                        <div class="form-group col-6">
+                            <label for="date" class="form-control-label">Fecha para el pedido</label>
+                            <input class="form-control" name="date" type="date" value="{{$listing->date}}" id="date">
+                        </div> 
+                    </div>
 
                     <div class="row">
                         <a href="{{route('listings.index')}}" class="btn btn-danger">
@@ -34,10 +33,7 @@
                         <button type="submit" class="btn btn-success">
                             Editar
                         </button>
-
-                       
                     </div>
-
                 </form> 
             </div>
         </div>
