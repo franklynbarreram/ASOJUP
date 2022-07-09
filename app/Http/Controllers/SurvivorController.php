@@ -14,6 +14,9 @@ use App\Models\MedicineForm;
 use App\Models\MedicineUnit;
 
 use App\Models\Survivor;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Permission;
 
 class SurvivorController extends Controller
 {
@@ -22,12 +25,13 @@ class SurvivorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index (Request $request)
+    public function index(Request $request)
     {
         $inscribed = InscribedUser::find($request->inscribed_id);
-
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
         return view('admin.inscribed_users.survivors.index', [
-            'inscribed' =>  $inscribed
+            'inscribed' =>  $inscribed, 'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -39,9 +43,12 @@ class SurvivorController extends Controller
     public function create(Request $request)
     {
         $inscribed = InscribedUser::find($request->inscribed_id);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
 
         return view('admin.inscribed_users.survivors.create', [
-            'inscribed' =>  $inscribed
+            'inscribed' =>  $inscribed,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -52,18 +59,21 @@ class SurvivorController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         try {
             //Validator
             //return $request->except('_token');
             $survivor = Survivor::create($request->except('_token'));
 
             return redirect()->route(
-                'survivors.index', ['inscribed_id' => $request->inscribed_user_id]
+                'survivors.index',
+                ['inscribed_id' => $request->inscribed_user_id]
             )->with(
-                'notification', 'Se ha creado el sobreviviente satisfactoriamente'
+                'notification',
+                'Se ha creado el sobreviviente satisfactoriamente'
             )->with(
-                'success', true
+                'success',
+                true
             );
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
@@ -90,9 +100,12 @@ class SurvivorController extends Controller
     public function edit($id)
     {
         $survivor = Survivor::find($id);
-        
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+
         return view('admin.inscribed_users.survivors.edit', [
-            'survivor'  =>  $survivor
+            'survivor'  =>  $survivor,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -111,13 +124,15 @@ class SurvivorController extends Controller
             $survivor->update($request->except('_token', '_method'));
 
             return redirect()->route(
-                'survivors.index', ['inscribed_id' => $survivor->inscribedUser->id]
+                'survivors.index',
+                ['inscribed_id' => $survivor->inscribedUser->id]
             )->with(
-                'notification', 'Se ha editado el sobreviviente satisfactoriamente'
+                'notification',
+                'Se ha editado el sobreviviente satisfactoriamente'
             )->with(
-                'success', true
+                'success',
+                true
             );
-
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }

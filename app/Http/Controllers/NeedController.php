@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Need;
 use App\Models\NeedType;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Permission;
 
 class NeedController extends Controller
 {
@@ -14,7 +17,7 @@ class NeedController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index (Request $request)
+    public function index(Request $request)
     {
         $type = $request->type;
         $need_type = NeedType::find($type);
@@ -22,11 +25,13 @@ class NeedController extends Controller
         $needs = Need::searchById($type)->paginate(10);
 
         $title = 'Listado de ' . $need_type->name . 'es';
-        
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
         return view('admin.needs.index', [
             'type_id'   =>  $type,
             'title'     =>  $title,
-            'needs'     =>  $needs
+            'needs'     =>  $needs,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -35,15 +40,17 @@ class NeedController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create (Request $request)
+    public function create(Request $request)
     {
         $type = $request->type;
         $need_type = NeedType::find($type);
         $title = 'Nueva ' . $need_type->name;
-
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
         return view('admin.needs.create', [
             'type_id'   =>  $type,
-            'title'     =>  $title
+            'title'     =>  $title,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -77,11 +84,14 @@ class NeedController extends Controller
         $need = Need::create($request->except('_token'));
 
         return redirect()->route(
-            'needs.index', ['type' => $request->need_type_id]
+            'needs.index',
+            ['type' => $request->need_type_id]
         )->with(
-            'notification', 'Se ha registrado la necesidad satisfactoriamente'
+            'notification',
+            'Se ha registrado la necesidad satisfactoriamente'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -107,10 +117,12 @@ class NeedController extends Controller
         $need = Need::find($id);
         $need_type = NeedType::find($need->need_type_id);
         $title = 'Editar ' . $need_type->name;
-
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
         return view('admin.needs.edit', [
             'need'  =>  $need,
-            'title' =>  $title
+            'title' =>  $title,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -149,11 +161,14 @@ class NeedController extends Controller
         $need->save();
 
         return redirect()->route(
-            'needs.index', ['type' => $need->need_type_id]
+            'needs.index',
+            ['type' => $need->need_type_id]
         )->with(
-            'notification', 'Se ha editado la necesidad satisfactoriamente'
+            'notification',
+            'Se ha editado la necesidad satisfactoriamente'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -165,26 +180,29 @@ class NeedController extends Controller
      */
     public function delete(Request $request)
     {
-        $deletedRows = Need::where('id',$request->id)->delete(); 
-       
+        $deletedRows = Need::where('id', $request->id)->delete();
+
         return redirect()->route(
-            'needs.index', ['type' => $request->type]
+            'needs.index',
+            ['type' => $request->type]
         )->with(
-            'notification', 'Se ha eliminado la necesidad satisfactoriamente'
+            'notification',
+            'Se ha eliminado la necesidad satisfactoriamente'
         )->with(
-            'success', true
-        );  
+            'success',
+            true
+        );
     }
 
-    public function ajaxStore (Request $request)  {
+    public function ajaxStore(Request $request)
+    {
         try {
             $need = Need::create($request->all());
-            
+
             return response()->json([
                 'status'    =>  'success',
                 'data'      =>  $need
             ]);
-
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }

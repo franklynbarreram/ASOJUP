@@ -13,7 +13,9 @@ use App\Models\Need;
 use App\Models\Medicine;
 use App\Models\MedicineForm;
 use App\Models\MedicineUnit;
+use Illuminate\Support\Facades\Auth;
 
+use App\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 use App\Rules\CurrentPasswordCheckRule;
 
@@ -24,13 +26,23 @@ class InscribedUsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index (Request $request)
+    public function index(Request $request)
     {
+        $admin = Auth::user();
         $inscribed_users = InscribedUser::all();
+        $id = Auth::id();
 
-        return view ('admin.inscribed_users.index', [
-            'inscribed_users'   =>  $inscribed_users
-        ]);
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+            return view('admin.inscribed_users.index', [
+                'inscribed_users'   =>  $inscribed_users,
+                'permission_delegated' => $permission_delegated,
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -38,7 +50,7 @@ class InscribedUsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create ()
+    public function create()
     {
         $diseases = Need::diseases()->get();
         $benefits = Need::benefits()->get();
@@ -46,14 +58,22 @@ class InscribedUsersController extends Controller
 
         $med_units = MedicineUnit::orderBy('name', 'asc')->get();
         $med_forms = MedicineForm::orderBy('name', 'asc')->get();
-
-        return view('admin.inscribed_users.create', [
-            'diseases'  =>  $diseases,
-            'benefits'  =>  $benefits,
-            'medicines' =>  $medicines,
-            'med_units' =>  $med_units,
-            'med_forms' =>  $med_forms
-        ]);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        $admin = Auth::user();
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.inscribed_users.create', [
+                'diseases' => $diseases,
+                'benefits' => $benefits,
+                'medicines' => $medicines,
+                'med_units' => $med_units,
+                'med_forms' => $med_forms,
+                'permission_delegated' => $permission_delegated,
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -62,10 +82,10 @@ class InscribedUsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store (Request $request)
+    public function store(Request $request)
     {
         try {
-            $password="";
+            $password = "";
             $inscribed = InscribedUser::create([
                 'name'      =>  $request->name,
                 'surname'   =>  $request->surname,
@@ -75,13 +95,13 @@ class InscribedUsersController extends Controller
                 'cicpc_id'          =>  $request->cicpc_id,
                 'active'            =>  true,
                 'address'           =>  $request->address,
-                'password'=>$password
+                'password' => $password
             ]);
         } catch (\Exception $e) {
             return $e;
         }
-        
-        
+
+
         //Medicines
         if (isset($request->medicines)) {
             foreach ($request->medicines as $med_id) {
@@ -113,9 +133,11 @@ class InscribedUsersController extends Controller
         }
 
         return redirect()->route('inscribedUsers.index')->with(
-            'notification', 'Se ha creado el inscrito satisfactoriamente.'
+            'notification',
+            'Se ha creado el inscrito satisfactoriamente.'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -125,9 +147,8 @@ class InscribedUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show ($id)
+    public function show($id)
     {
-
     }
 
     /**
@@ -136,25 +157,32 @@ class InscribedUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit ($id)
+    public function edit($id)
     {
         $inscribed = InscribedUser::find($id);
-
+        $admin = Auth::user();
         $diseases = Need::diseases()->get();
         $benefits = Need::benefits()->get();
         $medicines = Medicine::orderBy('name', 'asc')->get();
 
         $med_units = MedicineUnit::orderBy('name', 'asc')->get();
         $med_forms = MedicineForm::orderBy('name', 'asc')->get();
-
-        return view('admin.inscribed_users.edit', [
-            'inscribed' =>  $inscribed,
-            'diseases'  =>  $diseases,
-            'benefits'  =>  $benefits,
-            'medicines' =>  $medicines,
-            'med_units' =>  $med_units,
-            'med_forms' =>  $med_forms
-        ]);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.inscribed_users.edit', [
+                'inscribed' => $inscribed,
+                'diseases' => $diseases,
+                'benefits' => $benefits,
+                'medicines' => $medicines,
+                'med_units' => $med_units,
+                'med_forms' => $med_forms,
+                'permission_delegated' => $permission_delegated,
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -164,7 +192,7 @@ class InscribedUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update (Request $request, $id)
+    public function update(Request $request, $id)
     {
         $inscribed = InscribedUser::find($id);
 
@@ -196,9 +224,11 @@ class InscribedUsersController extends Controller
 
             //Delete benefits registered previously
             InscribedUserNeed::where(
-                'inscribed_user_id', $inscribed->id
+                'inscribed_user_id',
+                $inscribed->id
             )->whereIn(
-                'need_id', $inscribed->benefitsIds()
+                'need_id',
+                $inscribed->benefitsIds()
             )->delete();
 
             foreach ($request->benefits as $need_id) {
@@ -214,9 +244,11 @@ class InscribedUsersController extends Controller
 
             //Delete diseases registered previously
             InscribedUserNeed::where(
-                'inscribed_user_id', $inscribed->id
+                'inscribed_user_id',
+                $inscribed->id
             )->whereIn(
-                'need_id', $inscribed->diseasesIds()
+                'need_id',
+                $inscribed->diseasesIds()
             )->delete();
 
             foreach ($request->diseases as $need_id) {
@@ -228,9 +260,11 @@ class InscribedUsersController extends Controller
         }
 
         return redirect()->back()->with(
-            'notification', 'Se ha editado el inscrito satisfactoriamente.'
+            'notification',
+            'Se ha editado el inscrito satisfactoriamente.'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -240,12 +274,13 @@ class InscribedUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    
+
 
     /**
      * 
      */
-    public function ajaxInhabilitate (Request $request, $id) {
+    public function ajaxInhabilitate(Request $request, $id)
+    {
         try {
             $inscribed = InscribedUser::find($id);
 
@@ -266,8 +301,19 @@ class InscribedUsersController extends Controller
 
     public function edit_profile(Request $request, $id)
     {
+        $admin = Auth::user();
         $inscrito = InscribedUser::find($id);
-        return view('inscribed_users.edit',['inscrito'=>$inscrito]);
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+        if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
+            return view('admin.inscribed_users.edit_profile', [
+                'inscribed' => $inscrito,
+                'permission_delegated' => $permission_delegated,
+            ]);
+        } else {
+            $result = (new HomeController)->index();
+            return $result;
+        }
     }
 
     /**
@@ -279,14 +325,13 @@ class InscribedUsersController extends Controller
     public function update_profile(Request $request)
     {
 
-        try{
-            $inscrito = InscribedUser::find($request->id); 
+        try {
+            $inscrito = InscribedUser::find($request->id);
             $inscrito->update($request->all());
             $inscrito->save();
 
             return back()->withStatus(__('Datos actualizados correctamente.'));
-
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return back()->with('ErrorSave', 'Ha ocurrido un error.');
         }
     }
@@ -301,32 +346,30 @@ class InscribedUsersController extends Controller
     {
         $messages = [
             'confirmed' => 'La confirmación de contraseña no coincide.',
-            'different'=>'La nueva contraseña no puede ser igual a la anterior'
+            'different' => 'La nueva contraseña no puede ser igual a la anterior'
         ];
 
         $this->validate($request, [
             'old_password' => ['required'],
             'password' => ['required', 'confirmed', 'different:old_password'],
             'password_confirmation' => ['required'],
-        ],$messages);
+        ], $messages);
 
 
         $data = $request->all();
- 
+
         $user = InscribedUser::find($request->id);
-        if(!Hash::check($data['old_password'], $user->password)){
-             return back()->with('ErrorSavePassword','La contraseña ingresada no coincide con la contraseña antigua');
-        }else{
-            try{
-                
+        if (!Hash::check($data['old_password'], $user->password)) {
+            return back()->with('ErrorSavePassword', 'La contraseña ingresada no coincide con la contraseña antigua');
+        } else {
+            try {
+
                 $user->password = bcrypt($data['password']);
                 $user->save();
                 return back()->withPasswordStatus(__('Contraseña actualizada correctamente.'));
-    
-            } catch(\Exception $e){
+            } catch (\Exception $e) {
                 return back()->with('ErrorSavePassword', 'Ha ocurrido un error.');
             }
         }
-       
     }
 }

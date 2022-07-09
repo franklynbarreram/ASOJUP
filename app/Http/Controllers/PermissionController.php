@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Permission;
 
+use App\Http\Controllers\HomeController;
+
 class PermissionController extends Controller
 {
     /**
@@ -18,14 +20,19 @@ class PermissionController extends Controller
     {
         $admin = Auth::user();
 
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+
+
         if ($admin->role_id == 1) {
             $permissions = Permission::orderBy('created_at', 'desc')->get();
         } else {
             $permissions = Permission::where('user_id', $admin->id)->orderBy('created_at', 'desc')->get();
         }
 
-        return view ('admin.permissions.index', [
-            'permissions'   =>  $permissions
+        return view('admin.permissions.index', [
+            'permissions'   =>  $permissions,
+            'permission_delegated' => $permission_delegated,
         ]);
     }
 
@@ -36,7 +43,12 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view ('admin.permissions.create');
+
+        $id = Auth::id();
+        $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
+
+
+        return view('admin.permissions.create', ['permission_delegated' => $permission_delegated,]);
     }
 
     /**
@@ -56,10 +68,12 @@ class PermissionController extends Controller
         return redirect()->route(
             'permissions.index'
         )->with(
-            'notification', 'Se ha solicitado el permiso satisfactoriamente'
+            'notification',
+            'Se ha solicitado el permiso satisfactoriamente'
         )->with(
-            'success', true
-        );  
+            'success',
+            true
+        );
     }
 
     /**
@@ -102,9 +116,11 @@ class PermissionController extends Controller
         return redirect()->route(
             'permissions.index'
         )->with(
-            'notification', 'Se ha actualizado el permiso satisfactoriamente'
+            'notification',
+            'Se ha actualizado el permiso satisfactoriamente'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 
@@ -124,9 +140,11 @@ class PermissionController extends Controller
         return redirect()->route(
             'permissions.index'
         )->with(
-            'notification', 'Se ha cancelado el permiso satisfactoriamente'
+            'notification',
+            'Se ha cancelado el permiso satisfactoriamente'
         )->with(
-            'success', true
+            'success',
+            true
         );
     }
 }
