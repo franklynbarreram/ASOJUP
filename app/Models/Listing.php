@@ -9,7 +9,7 @@ class Listing extends Model
     protected $table = 'listings';
 
     protected $fillable = [
-        'description', 'date', 'user_id'
+        'description', 'date', 'user_id', 'inscribed_users_data'
     ];
 
     protected $hidden = [
