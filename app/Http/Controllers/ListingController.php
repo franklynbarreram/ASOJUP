@@ -189,11 +189,13 @@ class ListingController extends Controller
         $listing = Listing::find($request->listingId);
         $admin = Auth::user();
         $id = Auth::id();
+
         $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
         if ($permission_delegated != 0 && $admin->role_id == 2 || $admin->role_id == 1) {
             return view('admin.listings.history', [
                 'listing'  =>  $listing,
-                'permission_delegated' => $permission_delegated
+                'permission_delegated' => $permission_delegated,
+                'inscribedUsers' => json_decode($listing->inscribed_users_data),
             ]);
         } else {
             $result = (new HomeController)->index();
