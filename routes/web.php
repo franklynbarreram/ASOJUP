@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::put('listings/history/{listingId}/users', 'ListingHistoryController@saveListingUsersData')->name('listings.history.saveUsersData');
 
-  Route::get('generatePDF/{listingId}', 'ListingHistoryController@pdfGenerate')->name('generatePDF');
+  Route::get('listings/generatePDF/{listingId}', 'ListingHistoryController@pdfGenerate')->name('generatePDF');
 
 });
 

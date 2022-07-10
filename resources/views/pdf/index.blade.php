@@ -79,13 +79,13 @@
       <div>
         Fecha de creación: <?php
                             $createDate = new DateTime($created_at);
-                            echo $createDate->format('Y-m-d');
+                            echo $createDate->format('d-m-Y');
                             ?>
       </div>
       <div>
         Fecha del pedido: <?php
-                          $orderDate = new DateTime($created_at);
-                          echo $orderDate->format('Y-m-d');
+                          $orderDate = new DateTime($date);
+                          echo $orderDate->format('d-m-Y');
                           ?>
       </div>
     </div>

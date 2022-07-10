@@ -55,9 +55,9 @@
             </div>
             <div id="jsGrid"></div>
             <div class="row d-flex justify-content-center">
-                <button id="submit-listing" class="btn btn-success">
+                <a id="submit-listing" class="btn btn-success" href="{{route('generatePDF', $listing->id)}}">
                     Guardar Listado
-                </button>
+                </a>
             </div>
         </div>
     </div>
