@@ -80,6 +80,8 @@
     let listing = {!! json_encode($listing) !!}
     let token = $( "input[name='_token']" ).val();
 
+    console.log({ inscribedUSers })
+
     // JS Grid table
     $("#jsGrid").jsGrid({
         width: "100%",
