@@ -19,7 +19,29 @@
   .navbar {
     height: 100px;
     width: 100%;
-    background: #5e72e4;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .logo {
+    width: 80px;
+    margin-top: 10px;
+  }
+
+  .content-logo {
+    position: absolute;
+    margin-left: 10px;
+  }
+
+  .dates {
+    position: absolute;
+    margin-top: 30px;
+    margin-left: 110px;
+  }
+
+  .content-title {
+    width: 100%;
+    text-align: center;
     margin-bottom: 20px;
   }
 
@@ -27,6 +49,7 @@
     margin: 0 auto;
     width: fit-content;
     font-size: .85rem;
+    text-align: center;
   }
 
   .label {
@@ -49,17 +72,26 @@
 
 <body>
   <div class="navbar">
-    <div>
-      logo
+    <div class="content-logo">
+      <img class="logo" src="<?php echo $_SERVER["DOCUMENT_ROOT"] . '\imgs\AsojupLogo.png'; ?>" class="" alt="logo" id="LogoNavbar">
     </div>
-    <div class="row">
+    <div class="dates">
       <div>
-        fecha1
+        Fecha de creación: <?php
+                            $createDate = new DateTime($created_at);
+                            echo $createDate->format('Y-m-d');
+                            ?>
       </div>
       <div>
-        fecha2
+        Fecha del pedido: <?php
+                          $orderDate = new DateTime($created_at);
+                          echo $orderDate->format('Y-m-d');
+                          ?>
       </div>
     </div>
+  </div>
+  <div class="content-title">
+    <h3><?php echo $description ?></h3>
   </div>
   <div class="content">
     <table>
@@ -71,15 +103,17 @@
         <th class="label">TIPO DE REQUERIMINETO</th>
       </tr>
 
-      @foreach($inscribedUsers as $user)
-      <tr>
-        <td class="label">{{$user -> cicpc_id}}</td>
-        <td class="label">{{$user -> name}}</td>
-        <td class="label">{{$user -> surname}}</td>
-        <td class="label">{{$user -> item_name}}</td>
-        <td class="label">{{$user -> requirement_type}}</td>
-      </tr>
-      @endforeach
+      <?php if (is_array($inscribedUsers)) : ?>
+        @foreach($inscribedUsers as $user)
+        <tr>
+          <td class="label">{{$user -> cicpc_id}}</td>
+          <td class="label">{{$user -> name}}</td>
+          <td class="label">{{$user -> surname}}</td>
+          <td class="label">{{$user -> item_name}}</td>
+          <td class="label">{{$user -> requirement_type}}</td>
+        </tr>
+        @endforeach
+      <?php endif; ?>
     </table>
   </div>
 
