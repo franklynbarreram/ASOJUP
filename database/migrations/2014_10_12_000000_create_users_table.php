@@ -25,7 +25,8 @@ class CreateUsersTable extends Migration
     
                 $table->unsignedInteger('role_id');
                 $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-                
+
+                // TODO podriamos referencias el inscribed id
                 $table->rememberToken();
                 $table->timestamps();
             });

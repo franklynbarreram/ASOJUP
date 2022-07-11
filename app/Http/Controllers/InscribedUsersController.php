@@ -342,7 +342,7 @@ class InscribedUsersController extends Controller
      * @param  \App\Http\Requests\PasswordRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function password_profile(Request $request)
+    public function password_profile(Request $request) // TODO - reutilizar
     {
         $messages = [
             'confirmed' => 'La confirmación de contraseña no coincide.',
@@ -371,5 +371,12 @@ class InscribedUsersController extends Controller
                 return back()->with('ErrorSavePassword', 'Ha ocurrido un error.');
             }
         }
+    }
+
+    public function view_profile() {
+        $inscribed = InscribedUser::find(1); // TODO - obtener el id desde el user logeado como inscribed_id
+        return view('inscribed_users.edit', [
+            'inscrito' => $inscribed
+        ]);
     }
 }

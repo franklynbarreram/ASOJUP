@@ -32,6 +32,7 @@
                         </div>
                     </div>
                 </div>
+                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && $permission_delegated!=0 ) )
                 <div class="col-xl-4 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
                         <div class="card-body">
@@ -53,6 +54,10 @@
                         </div>
                     </div>
                 </div>
+                @endif
+
+
+                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && $permission_delegated!=0 ) )
                 <div class="col-xl-4 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
                         <div class="card-body">
@@ -74,7 +79,29 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
+                @if(Auth::user()->role_id == 3)
+                <div class="col-xl-4 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Solicitudes Pendientes</h5>
+{{--                                    reemplazar con solicitudes --}}
+                                    <span class="h2 font-weight-bold mb-0">{{$permissions}}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
 
         </div>

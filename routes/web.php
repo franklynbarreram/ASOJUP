@@ -18,13 +18,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/login/inscrito', 'InscribedLoginController@index');
-Route::get('/portal', 'InscribedLoginController@InscribedDashboard');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-
+Route::get('inscribedUsers/profile', ['as' => 'inscribed_users.view', 'uses' => 'InscribedUsersController@view_profile']);
 Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
 Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);
 Route::put('inscribedUsers/profile/password', ['as' => 'inscribed_users.password', 'uses' => 'InscribedUsersController@password_profile']);
