@@ -76,11 +76,11 @@
     const sidebarOptions = document.getElementById("listing-options");
     sidebarOptions.classList.add("show");
 
-    let inscribedUsers = {!! json_encode($inscribedUsers) !!}
+    let inscribedUsers = {!! json_encode($inscribedUsers) !!} || []
     let listing = {!! json_encode($listing) !!}
     let token = $( "input[name='_token']" ).val();
 
-    console.log({ inscribedUSers })
+    console.log({ inscribedUsers })
 
     // JS Grid table
     $("#jsGrid").jsGrid({
