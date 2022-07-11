@@ -33,10 +33,20 @@
     margin-left: 10px;
   }
 
-  .dates {
+  .content-header {
     position: absolute;
-    margin-top: 30px;
+    margin-top: 20px;
     margin-left: 110px;
+  }
+
+  .title {
+    font-size: 16px;
+    margin: 0;
+    margin-bottom: 5px;
+  }
+
+  .dates {
+    margin: 0;
   }
 
   .content-title {
@@ -46,7 +56,7 @@
   }
 
   .content {
-    margin: 0 auto;
+    margin-left: 30px;
     width: fit-content;
     font-size: .85rem;
     text-align: center;
@@ -75,18 +85,15 @@
     <div class="content-logo">
       <img class="logo" src="<?php echo $_SERVER["DOCUMENT_ROOT"] . '\imgs\AsojupLogo.png'; ?>" class="" alt="logo" id="LogoNavbar">
     </div>
-    <div class="dates">
-      <div>
-        Fecha de creación: <?php
-                            $createDate = new DateTime($created_at);
-                            echo $createDate->format('d-m-Y');
+    <div class="content-header">
+      <h1 class="title">Asociación Civil de Jubilados, Pensionados y Sobrevivientes del CICPC (ASOJUP-CICPC)</h1>
+      <div class="dates">
+        <div>
+          Fecha del pedido: <?php
+                            $orderDate = new DateTime($date);
+                            echo $orderDate->format('d-m-Y');
                             ?>
-      </div>
-      <div>
-        Fecha del pedido: <?php
-                          $orderDate = new DateTime($date);
-                          echo $orderDate->format('d-m-Y');
-                          ?>
+        </div>
       </div>
     </div>
   </div>
@@ -96,7 +103,7 @@
   <div class="content">
     <table>
       <tr>
-        <th class="label">CICPC ID</th>
+        <th class="label">IDENTIFICACIÓN</th>
         <th class="label">NOMBRE</th>
         <th class="label">APELLIDO</th>
         <th class="label">REQUERIMIENTO</th>
@@ -106,7 +113,7 @@
       <?php if (is_array($inscribedUsers)) : ?>
         @foreach($inscribedUsers as $user)
         <tr>
-          <td class="label">{{$user -> cicpc_id}}</td>
+          <td class="label">{{$user -> identification}}</td>
           <td class="label">{{$user -> name}}</td>
           <td class="label">{{$user -> surname}}</td>
           <td class="label">{{$user -> item_name}}</td>
