@@ -18,7 +18,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/login/inscrito', 'InscribedLoginController@index');
+Route::get('/portal', 'InscribedLoginController@InscribedDashboard');
+
 Route::get('/home', 'HomeController@index')->name('home');
+
+
 
 Route::get('inscribedUsers/profile/{id}', ['as' => 'inscribed_users.edit', 'uses' => 'InscribedUsersController@edit_profile']);
 Route::put('inscribedUsers/profile', ['as' => 'inscribed_users.update', 'uses' => 'InscribedUsersController@update_profile']);

@@ -46,8 +46,8 @@ class HomeController extends Controller
         $permission_delegated = Permission::where([['status', '=', "Pendiente"], ['user_id', '=', $id]])->count();
 
         return view('admin.dashboard', [
-            'inscribed'   =>  $inscribed,
-            'permissions' =>  $permissions,
+            'inscribed' => $inscribed,
+            'permissions' => $permissions,
             'listings' => $listings,
             'permission_delegated' => $permission_delegated,
         ]);
