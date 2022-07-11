@@ -1,5 +1,5 @@
-<nav class="navbar navbar-vertical fixed-left navbar-expand-lg navbar-light bg-white" id="sidenav-main">
-    <div class="d-flex d-lg-block justify-content-between align-items-center w-100">
+<nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
+    <div class="d-flex d-md-block justify-content-between align-items-center w-100">
         <!-- Toggler -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -7,14 +7,14 @@
         <!-- User -->
 
         <!-- Brand -->
-        <a class="d-none d-lg-flex justify-content-center pt-0 " href="{{ route('home') }}">
+        <a class="d-none d-md-flex justify-content-center pt-0 " href="{{ route('home') }}">
             <img src="{{ asset('imgs') }}/AsojupLogo.png" class="" alt="..." id="LogoNavbar">
         </a>
 
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="sidenav-collapse-main">
             <!-- Collapse header -->
-            <div class="navbar-collapse-header d-lg-none">
+            <div class="navbar-collapse-header d-md-none">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sidenav-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -190,14 +190,14 @@
 
         </div>
         <div class="">
-            <ul class="align-items-center d-flex d-lg-none">
+            <ul class="align-items-center d-flex d-md-none">
                 <li class="nav-item dropdown">
                     <a class="nav-link p-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="media align-items-center">
                             <span class=" rounded-circle">
                                 <i style="font-size: 2rem;" class=" fa fa-user-circle " aria-hidden="true"></i>
                             </span>
-                            <div class="media-body ml-2 d-none d-lg-block">
+                            <div class="media-body ml-2 d-none d-md-block">
                                 <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->name }}</span>
                             </div>
                         </div>
