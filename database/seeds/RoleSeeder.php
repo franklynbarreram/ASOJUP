@@ -13,7 +13,11 @@ class RoleSeeder extends Seeder
         [
             'role'  =>  'Delegate',
             'description'   =>  'Usuario secundario, puede solamente registrar usuarios, para ejecutar el resto de funciones deberá solicitar permisos'
-        ]
+        ],
+        [
+            'role'  =>  'Inscribed',
+            'description'   =>  'Usuario cliente, solo puede realizar solicitudes'
+        ],
     ];
 
     /**
