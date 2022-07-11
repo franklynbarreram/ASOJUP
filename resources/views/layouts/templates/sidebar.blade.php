@@ -197,34 +197,6 @@
                             <i class="fas fa-exclamation-circle text-yellow"></i> {{ __('Ver mis datos') }}
                         </a>
                     </li>
-                    <!-- Collapse Medicamentos -->
-                    <li class="nav-item">
-                        <!-- Opciones para inscritos -->
-                        <a class="nav-link collapsed" href="#medicines-options" id="medicine-link" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="medicines-options">
-                            <i class="fas fa-capsules text-blue"></i>
-                            <span class="nav-link-text">{{ __('Solicitudes') }}</span>
-                        </a>
-
-                        <div class="collapse" id="medicines-options">
-                            <ul class="nav nav-sm flex-column">
-                                <!-- Nuevo Inscrito -->
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('medicines.create') }}">
-                                        <i class="fas fa-plus-square"></i>
-                                        {{ __('Crear') }}
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('medicines.index') }}">
-                                        <i class="fas fa-list-alt"></i>
-                                        {{ __('Ver Todos') }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Fin funciones para inscritos -->
-                    </li>
-                    <!-- End of Collapse -->
                 @endif
             </ul>
 
