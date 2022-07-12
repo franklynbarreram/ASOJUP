@@ -122,7 +122,7 @@
                 @endif
                 <!-- End of Collapse -->
 
-                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && $permission_delegated!=0 ) )
+                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 ) )
                 <!-- Collapse Medicamentos -->
                 <li class="nav-item">
                     <!-- Opciones para inscritos -->
@@ -167,7 +167,7 @@
                 <!-- End of Collapse -->
                 @endif
 
-                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && $permission_delegated!=0 ) )
+                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 ) )
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('needs.index', ['type' => 1])}}">
                         <i class="fas fa-stethoscope text-orange"></i> {{ __('Enfermedades') }}
@@ -175,7 +175,7 @@
                 </li>
                 @endif
 
-                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && $permission_delegated!=0 ) )
+                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 ) )
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('needs.index', ['type' => 2])}}">
                         <i class="fas fa-hands-helping text-info"></i> {{ __('Beneficios') }}
@@ -183,7 +183,7 @@
                 </li>
                 @endif
 
-                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && $permission_delegated!=0 ) )
+                @if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 ) )
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('permissions.index')}}">
                         <i class="fas fa-exclamation-circle text-yellow"></i> {{ __('Permisos') }}
